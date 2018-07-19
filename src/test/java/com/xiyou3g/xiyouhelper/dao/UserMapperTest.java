@@ -26,4 +26,9 @@ public class UserMapperTest {
         userMapper.insert(user);
     }
 
+    @Test
+    public void whenTestBranch() {
+        System.out.println("dev branch ok!!");
+    }
+
 }
