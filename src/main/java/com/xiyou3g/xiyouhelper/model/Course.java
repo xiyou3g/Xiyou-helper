@@ -5,12 +5,23 @@ package com.xiyou3g.xiyouhelper.model;
  * 18-7-20 下午2:17
  */
 public class Course {
-    private String name;    // 课程名称
-    private String weekDay; // 周几
-    private String weeks;    // 几周
-    private String time;    // 节数
-    private String teacherName; // 老师
-    private String classroom;   // 教室
+    /** 课程名称 */
+    private String name;
+    /** 周几 */
+    private String weekDay;
+    /** 几周 */
+    private String weeks;
+    /** 节数 */
+    private String time;
+    /** 是否单周 */
+    private boolean isOddWeek = false;
+    /** 是否双周 */
+    private boolean isEvenWeek = false;
+    /** 老师 */
+    private String teacherName;
+    /** 教室 */
+
+    private String classroom;
 
     public String getName() {
         return name;
@@ -18,6 +29,22 @@ public class Course {
 
     public String getClassroom() {
         return classroom;
+    }
+
+    public boolean isOddWeek() {
+        return isOddWeek;
+    }
+
+    public void setOddWeek(boolean oddWeek) {
+        isOddWeek = oddWeek;
+    }
+
+    public boolean isEvenWeek() {
+        return isEvenWeek;
+    }
+
+    public void setEvenWeek(boolean evenWeek) {
+        isEvenWeek = evenWeek;
     }
 
     public void setClassroom(String classroom) {

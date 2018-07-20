@@ -12,7 +12,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
@@ -25,10 +27,12 @@ import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.*;
 public class CurriculumProcessor implements PageProcessor {
 
     private String curriculumUrl = "http://222.24.62.120/xskbcx.aspx?xh=04161031&xm=%C3%CF%B3%BF&gnmkdm=N121603";
-    private String sessionId = "m0k0yx45gcgy3gv0opy1r12n";
+    private String sessionId = "wkxkuj55m4hu4n45r4cksl55";
     private String year = "2017-2018";
     private String term = "1";
 
+
+    private static List<Course> courses = new ArrayList<>();
 
     private Site site = Site.me()
             .setDomain(XYE_HOST)
@@ -39,11 +43,83 @@ public class CurriculumProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         Html html = new Html(page.getRawText(), "http://222.24.62.120/xskbcx.aspx?xh=04161031&xm=%C3%CF%B3%BF&gnmkdm=N121603");
-        String courseNode = html.xpath("/html/body/form/div/div/span/table[2]/tbody/tr[3]/td[3]").toString();
+        for (int i = 2; i < 15; i++) {
+            for (int j = 3; j < 10; j++) {
+                String courseNode = html.xpath("/html/body/form/div/div/span/table[2]/tbody/tr[" + i +"]/td[" + j + "]").get();
+                if (courseNode == null ||courseNode.trim() == "") {
+                    continue;
+                }
+                if (courseNode == "<td align=\"Center\">&nbsp;</td>" || courseNode.equals("<td align=\"Center\">&nbsp;</td>")) {
+                    continue;
+                }
 
+                if (courseNode.indexOf("noprint") != -1) {
+                    continue;
+                }
+
+                System.out.println(courseNode + i + " " + j);
+                handlerCourse(courseNode);
+            }
+            printCourses();
+        }
     }
 
-    public Course handler
+    private void printCourses() {
+        for (Course course : courses) {
+            System.out.println(course.getName());
+            System.out.println(course.getWeekDay());
+            System.out.println(course.getTime());
+            System.out.println(course.getWeeks());
+            System.out.println(course.getTeacherName());
+            System.out.println(course.getClassroom());
+            System.out.println("是否单周：" + course.isOddWeek());
+            System.out.println("是否双周：" + course.isEvenWeek());
+        }
+    }
+
+    public void handlerCourse(String courseStr) {
+        Course course = new Course();
+        int i = courseStr.indexOf('>'), j;
+        // 取出课程名字
+        course.setName(courseStr.substring(i + 1, courseStr.indexOf('<', i)));
+        i = courseStr.indexOf('>', i + 1);
+        // 取出周几
+        course.setWeekDay(courseStr.substring(i + 1, i + 3));
+        // 取出节数
+        course.setTime(courseStr.substring(i + 3, courseStr.indexOf('{', i)));
+        // 设置单双周
+        if ((j = courseStr.indexOf('|', i)) != -1) {
+            i = courseStr.indexOf('{', i);
+            // 设置周数
+            course.setWeeks(courseStr.substring(i + 1, courseStr.indexOf('|', i)));
+            if (courseStr.substring(j + 1, j + 2).equals("单")) {
+                course.setOddWeek(true);
+            } else {
+                course.setEvenWeek(true);
+            }
+        } else {
+            i = courseStr.indexOf('{', i);
+            // 设置周数
+            course.setWeeks(courseStr.substring(i + 1, courseStr.indexOf('}', i)));
+        }
+        i = courseStr.indexOf('>', i);
+        // 设置老师姓名
+        course.setTeacherName(courseStr.substring(i + 1, courseStr.indexOf('<', i)));
+        i = courseStr.indexOf('>', i + 1);
+        // 设置教室
+        course.setClassroom(courseStr.substring(i + 1, courseStr.indexOf('<', i)));
+        // 处理一个单双周课不同或者有调课的地方
+        if ((i = courseStr.indexOf("<br><br>", i)) != -1) {
+            // 单双周有不同的课
+            if (courseStr.indexOf("font") == -1) {
+                courseStr = courseStr.substring(i + 8);
+                // 构造一个和上面类似的字符串，然后使用递归
+                courseStr = ">" + courseStr;
+                handlerCourse(courseStr);
+            }
+        }
+        courses.add(course);
+    }
 
 
     @Override
