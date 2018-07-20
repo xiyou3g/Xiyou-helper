@@ -2,6 +2,7 @@ package com.xiyou3g.xiyouhelper.web.service.impls;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
+import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class BookService implements IBookService {
             return ServerResponse.createByErrorMsg("登录失败");
         }
 
-        sessionUtil.setSessionId(barcode, sessionId);
+        sessionUtil.setSessionId(PrefixEnum.Book.getDesc(), barcode, sessionId);
 
         return ServerResponse.createBySuccessMsg("登录成功");
     }

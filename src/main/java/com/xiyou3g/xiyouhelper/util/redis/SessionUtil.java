@@ -14,15 +14,13 @@ public class SessionUtil {
     private RedisTemplate redisTemplate;
 
     @SuppressWarnings("unchecked")
-    public boolean setSessionId(String barcode, String sessionId) {
+    public boolean setSessionId(String prefix, String barcode, String sessionId) {
 
         if (barcode == null || sessionId == null) {
             return false;
         }
 
-        System.out.println(barcode + " " + sessionId);
-
-        redisTemplate.opsForValue().set(barcode, sessionId);
+        redisTemplate.opsForValue().set(prefix + barcode, sessionId);
         return true;
     }
 
