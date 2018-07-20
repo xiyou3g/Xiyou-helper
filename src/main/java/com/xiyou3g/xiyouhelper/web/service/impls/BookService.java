@@ -1,12 +1,20 @@
 package com.xiyou3g.xiyouhelper.web.service.impls;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
+import com.xiyou3g.xiyouhelper.dao.UserMapper;
+import com.xiyou3g.xiyouhelper.model.Book;
+import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
+import com.xiyou3g.xiyouhelper.processor.BookProcessor;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IBookService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author zeng
@@ -14,8 +22,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookService implements IBookService {
 
+    Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private BookProcessor bookProcessor;
+
 
     @Override
     public ServerResponse<String> login(String barcode, String password) {
@@ -28,6 +43,29 @@ public class BookService implements IBookService {
 
         sessionUtil.setSessionId(PrefixEnum.Book.getDesc(), barcode, sessionId);
 
+        // TODO: 2018/7/20 账户密码持久到数据库
+
         return ServerResponse.createBySuccessMsg("登录成功");
     }
+
+    @Override
+    public ServerResponse<List<Book>> search(String barcode, String suchenType,
+                                             String suchenWord, String libraryId) {
+
+        if (barcode == null) {
+            return ServerResponse.createByErrorMsg("一卡通为空，查询失败");
+        }
+
+        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
+
+        if (sessionId == null) {
+            return ServerResponse.createByErrorMsg("身份认证失效，请重新登录");
+        }
+
+//        bookProcessor.
+
+        return null;
+    }
+
+
 }
