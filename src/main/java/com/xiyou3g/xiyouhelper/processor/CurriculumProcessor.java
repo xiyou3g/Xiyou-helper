@@ -43,7 +43,7 @@ public class CurriculumProcessor implements PageProcessor {
 
     }
 
-    public Course handler
+//    public Course handler
 
 
     @Override
