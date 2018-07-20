@@ -20,10 +20,10 @@ public class BookOkHttp {
             .readTimeout(20, TimeUnit.SECONDS)
             .build();
 
-    public static boolean login(String barcode, String password) {
+    public static String login(String barcode, String password) {
 
         if (barcode == null || password == null) {
-            return false;
+            return null;
         }
 
         FormBody formBody = new FormBody.Builder()
@@ -36,32 +36,23 @@ public class BookOkHttp {
                 .post(formBody)
                 .build();
 
-//        创建Call
+
         Call call = client.newCall(request);
-//        加入队列 异步
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("连接失败");
+        try {
+            Response response = call.execute();
+            String setCookie = response.headers().get("Set-Cookie");
+            String sessionId = setCookie.substring(0, setCookie.indexOf(";"));
+
+            if (sessionId != null) {
+                return sessionId;
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("连接成功");
-                System.out.println(response.toString());
-                System.out.println(response.headers());
-            }
-        });
-
-        return true;
-    }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-    public static String getMyBorrowedBooks() {
         return null;
     }
 
-    public static void main(String[] args) {
-        login("04163209", "163209");
-    }
+
 }

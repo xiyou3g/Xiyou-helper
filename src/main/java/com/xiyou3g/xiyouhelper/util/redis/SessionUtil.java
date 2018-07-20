@@ -4,17 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import java.util.concurrent.TimeUnit;
-
-
 /**
  * @author zeng
  */
 @Component
 public class SessionUtil {
 
-    @Resource
+    @Autowired
     private RedisTemplate redisTemplate;
 
     @SuppressWarnings("unchecked")
@@ -24,9 +20,14 @@ public class SessionUtil {
             return false;
         }
 
-        System.out.println("test here");
+        System.out.println(barcode + " " + sessionId);
 
-        redisTemplate.opsForValue().set(barcode, sessionId, 1, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set(barcode, sessionId);
         return true;
+    }
+
+    public String getSessionId(String key) {
+
+        return (String) redisTemplate.opsForValue().get(key);
     }
 }

@@ -3,6 +3,7 @@ package com.xiyou3g.xiyouhelper.web.controller;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
+import com.xiyou3g.xiyouhelper.web.service.IBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,15 @@ public class BookController {
     Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SessionUtil sessionUtil;
+    private IBookService bookService;
 
     @PostMapping("/login")
     public ServerResponse<String> login(String barcode, String password) {
 
-        if (!BookOkHttp.login(barcode, password)) {
-            return ServerResponse.createByErrorMsg("登录失败");
-        }
+        ServerResponse response = bookService.login(barcode, password);
 
-        logger.info(barcode);
-        logger.info(password);
-
-        sessionUtil.setSessionId(barcode, password);
-
-        return ServerResponse.createBySuccessMsg("登录成功");
+        return response;
     }
+
+
 }
