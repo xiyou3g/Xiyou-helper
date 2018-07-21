@@ -28,4 +28,8 @@ public class SessionUtil {
 
         return (String) redisTemplate.opsForValue().get(key);
     }
+
+    public String getSessionId(String prefix, String barcode) {
+        return getSessionId(prefix + barcode);
+    }
 }

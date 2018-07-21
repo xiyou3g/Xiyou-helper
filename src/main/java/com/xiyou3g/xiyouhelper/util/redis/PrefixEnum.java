@@ -6,7 +6,7 @@ package com.xiyou3g.xiyouhelper.util.redis;
  */
 public enum PrefixEnum {
 
-    Curriculum(0, "CURRICULUM"),
+    XYEDU(0, "XYEDU"),
     Book(1, "BOOK");
 
     private int code;

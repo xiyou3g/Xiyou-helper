@@ -35,11 +35,11 @@ public class BookController {
         return response;
     }
 
-    @GetMapping("/search")
-    public ServerResponse<List<Book>> search(String suchenType, String suchenWord, String suchenMatch,
-                                             String recordType, String libraryId, String showType) {
-
-        
-
-    }
+//    @GetMapping("/search")
+//    public ServerResponse<List<Book>> search(String suchenType, String suchenWord, String suchenMatch,
+//                                             String recordType, String libraryId, String showType) {
+//
+//
+//
+//    }
 }
