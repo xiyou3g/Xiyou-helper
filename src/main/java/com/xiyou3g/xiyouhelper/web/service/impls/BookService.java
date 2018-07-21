@@ -3,7 +3,6 @@ package com.xiyou3g.xiyouhelper.web.service.impls;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.dao.UserMapper;
 import com.xiyou3g.xiyouhelper.model.Book;
-import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
 import com.xiyou3g.xiyouhelper.processor.BookProcessor;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
@@ -28,8 +27,6 @@ public class BookService implements IBookService {
     private SessionUtil sessionUtil;
     @Autowired
     private UserMapper userMapper;
-    @Autowired
-    private BookProcessor bookProcessor;
 
 
     @Override
@@ -62,9 +59,15 @@ public class BookService implements IBookService {
             return ServerResponse.createByErrorMsg("身份认证失效，请重新登录");
         }
 
-//        bookProcessor.
+        BookProcessor bookProcessor = new BookProcessor(sessionId, suchenType, suchenWord, libraryId);
 
-        return null;
+        List<Book> booksResponse = bookProcessor.searchBooks();
+
+        if (booksResponse == null || (booksResponse.size() == 0 && booksResponse.get(0) == null)) {
+            return ServerResponse.createByErrorMsg("没有内容");
+        }
+
+        return ServerResponse.createBySuccess("查询成功", booksResponse);
     }
 
 

@@ -1,8 +1,5 @@
 package com.xiyou3g.xiyouhelper.processor;
 
-import com.xiyou3g.xiyouhelper.model.Course;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -19,8 +16,8 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.*;
 
 /**
- * mengchen
- * 18-7-20 上午9:30
+ * @author mengchen
+ * @date 18-7-20 上午9:30
  */
 public class CurriculumProcessor implements PageProcessor {
 
