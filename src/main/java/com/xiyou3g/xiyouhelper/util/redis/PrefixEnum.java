@@ -8,6 +8,7 @@ public enum PrefixEnum {
 
     Curriculum(0, "CURRICULUM"),
     Book(1, "BOOK");
+   // Cet(2, "CET");
 
     private int code;
     private String desc;
