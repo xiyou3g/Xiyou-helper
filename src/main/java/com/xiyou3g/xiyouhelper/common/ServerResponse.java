@@ -9,9 +9,6 @@ import java.io.Serializable;
  * @author zeng
  */
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
-/**
- * 响应对象类
- */
 public class ServerResponse<T> implements Serializable{
 
     private int status;
