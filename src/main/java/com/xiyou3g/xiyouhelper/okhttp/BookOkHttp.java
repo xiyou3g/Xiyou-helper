@@ -1,6 +1,7 @@
 package com.xiyou3g.xiyouhelper.okhttp;
 
 import okhttp3.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_LOGIN_USER
 /**
  * @author zeng
  */
+@Component
 public class BookOkHttp {
 
     private static OkHttpClient client = new OkHttpClient.Builder()
@@ -21,7 +23,7 @@ public class BookOkHttp {
             .readTimeout(20, TimeUnit.SECONDS)
             .build();
 
-    public static String login(String barcode, String password) {
+    public String login(String barcode, String password) {
 
         if (barcode == null || password == null) {
             return null;
@@ -54,6 +56,7 @@ public class BookOkHttp {
 
         return null;
     }
+
 
 
 }

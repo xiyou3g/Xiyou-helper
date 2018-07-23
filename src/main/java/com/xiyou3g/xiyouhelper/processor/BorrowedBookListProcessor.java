@@ -63,9 +63,9 @@ public class BorrowedBookListProcessor implements PageProcessor {
             bookStatus.setBookName(
                     page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
             bookStatus.setShouldReturnDay(
-                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i +"]/td[7]").toString());
+                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i +"]/td[7]/text()").toString());
             bookStatus.setBookCode(
-                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[4]").toString());
+                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
 
             this.borrowedBooks.add(bookStatus);
         }

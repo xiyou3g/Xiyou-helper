@@ -2,6 +2,7 @@ package com.xiyou3g.xiyouhelper.web.service;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.Book;
+import com.xiyou3g.xiyouhelper.model.BookStatus;
 
 import java.util.List;
 
@@ -14,4 +15,7 @@ public interface IBookService {
     ServerResponse<String> login(String barcode, String password);
 
     ServerResponse<List<Book>> search(String barcode, String suchenType, String suchenWord, String libraryId);
+
+    ServerResponse<List<BookStatus>> getMyBorrowedBooks(String barcode);
+
 }

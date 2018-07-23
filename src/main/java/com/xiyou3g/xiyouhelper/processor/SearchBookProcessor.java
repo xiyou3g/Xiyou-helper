@@ -1,7 +1,9 @@
 package com.xiyou3g.xiyouhelper.processor;
 
 import com.xiyou3g.xiyouhelper.model.Book;
+import com.xiyou3g.xiyouhelper.model.BookStatus;
 import com.xiyou3g.xiyouhelper.pipeline.BookPipeline;
+import com.xiyou3g.xiyouhelper.pipeline.BookStatusPipeline;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -41,6 +43,10 @@ public class SearchBookProcessor implements PageProcessor {
         this.suchenType = suchenType;
         this.suchenWord = suchenWord;
         this.libraryId = libraryId;
+    }
+
+    public SearchBookProcessor(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     private Site site = Site.me().setRetryTimes(3).setTimeOut(10000);
@@ -84,6 +90,7 @@ public class SearchBookProcessor implements PageProcessor {
                     }
 
                     if (author != null) {
+                        System.out.println("author is not null");
                         page.putField("author", author);
                     }
                 }
@@ -129,6 +136,36 @@ public class SearchBookProcessor implements PageProcessor {
 
         return bookPipeline.getBooks();
     }
+
+    public Book searchBook(String BookCode) {
+
+        Request request = new Request("http://222.24.3.7:8080/opac_two/search2/searchout.jsp");
+        request.setMethod(HttpConstant.Method.POST);
+
+        request.setCharset("GBK")
+                .addHeader("Host", BOOK_HOST)
+                .addHeader("Cookie", this.sessionId)
+                .addHeader("Referer", "http://222.24.3.7:8080/opac_two/search2/search_simple.jsp?search_no_type=Y&snumber_type=Y&show_type=Z")
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36")
+                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("suchen_type", 7);
+        params.put("suchen_word", BookCode);
+        params.put("suchen_match", "mh");
+        params.put("recordtype", "all");
+        params.put("library_id", "all");
+
+        request.setRequestBody(HttpRequestBody.form(params, "GBK"));
+
+        BookStatusPipeline bookStatusPipeline = new BookStatusPipeline();
+        Spider.create(this)
+                .addPipeline(bookStatusPipeline)
+                .addRequest(request).thread(5).run();
+
+        return bookStatusPipeline.getBook();
+    }
+
 
 
     public String getSessionId() {
