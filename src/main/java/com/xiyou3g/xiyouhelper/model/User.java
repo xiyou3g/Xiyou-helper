@@ -1,33 +1,139 @@
 package com.xiyou3g.xiyouhelper.model;
 
+/**
+ *
+ * @author mengchen
+ */
 public class User {
-    private Integer id;
+    /**
+     * 用户id，即学号
+     */
+    private String sid;
 
-    private String userName;
+    /**
+     * 姓名
+     */
+    private String name;
 
-    private String password;
+    /**
+     * 不知道是啥的东西，反正要用
+     */
+    private String gnmkdm;
 
-    public Integer getId() {
-        return id;
+    /**
+     * 性别
+     */
+    private Integer gender;
+
+    /**
+     * 学院
+     */
+    private String college;
+
+    /**
+     * 专业
+     */
+    private String major;
+
+    /**
+     * 班级
+     */
+    private String adclass;
+
+    /**
+     * 所在级Level
+     */
+    private String level;
+
+    /**
+     * 学历
+     */
+    private String education;
+
+    public String getEducation() {
+        return education;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEducation(String education) {
+        this.education = education;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getSid() {
+        return sid;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setSid(String sid) {
+        this.sid = sid;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getGnmkdm() {
+        return gnmkdm;
+    }
+
+    public void setGnmkdm(String gnmkdm) {
+        this.gnmkdm = gnmkdm;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getCollege() {
+        return college;
+    }
+
+    public void setCollege(String college) {
+        this.college = college;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getAdclass() {
+        return adclass;
+    }
+
+    public void setAdclass(String adclass) {
+        this.adclass = adclass;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "sid='" + sid + '\'' +
+                ", name='" + name + '\'' +
+                ", gnmkdm='" + gnmkdm + '\'' +
+                ", gender=" + gender +
+                ", college='" + college + '\'' +
+                ", major='" + major + '\'' +
+                ", adclass='" + adclass + '\'' +
+                ", level='" + level + '\'' +
+                ", education='" + education + '\'' +
+                '}';
     }
 }

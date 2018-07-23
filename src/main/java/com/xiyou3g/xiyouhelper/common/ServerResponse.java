@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.io.Serializable;
 
 /**
+ * 响应对象类
  * @author zeng
  */
 @JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
@@ -39,10 +40,10 @@ public class ServerResponse<T> implements Serializable{
     }
 
 
-    @JsonIgnore
     /**
      * 不在Json序列化中
      */
+    @JsonIgnore
     public boolean isSuccess() {
         return this.status == ResponseCode.SUCCESS.getCode();
     }
