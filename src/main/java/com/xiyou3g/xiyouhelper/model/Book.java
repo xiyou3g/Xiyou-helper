@@ -6,6 +6,7 @@ package com.xiyou3g.xiyouhelper.model;
  */
 public class Book {
 
+    private String bookImgUrl;
     private String bookName;
     private String author;
     private String publishingHouse;
@@ -13,6 +14,13 @@ public class Book {
     private String indexNumber;
     private Long leftNumber;
 
+    public String getBookImgUrl() {
+        return bookImgUrl;
+    }
+
+    public void setBookImgUrl(String bookImgUrl) {
+        this.bookImgUrl = bookImgUrl;
+    }
 
     public String getBookName() {
         return bookName;

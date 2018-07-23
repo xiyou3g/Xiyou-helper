@@ -131,5 +131,6 @@ public class AchievementProcessor implements PageProcessor {
         request.setMethod(HttpConstant.Method.POST);
         request.setRequestBody(HttpRequestBody.form(map, "GBK"));
         Spider.create(new AchievementProcessor()).addRequest(request).run();
+
     }
 }

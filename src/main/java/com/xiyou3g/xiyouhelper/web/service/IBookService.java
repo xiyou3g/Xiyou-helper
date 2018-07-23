@@ -18,4 +18,5 @@ public interface IBookService {
 
     ServerResponse<List<BookStatus>> getMyBorrowedBooks(String barcode);
 
+    ServerResponse<String> renew(String barcode, String bookCode);
 }

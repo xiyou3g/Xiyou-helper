@@ -49,7 +49,7 @@ public class SearchBookProcessor implements PageProcessor {
         this.sessionId = sessionId;
     }
 
-    private Site site = Site.me().setRetryTimes(3).setTimeOut(10000);
+    private Site site = Site.me().setRetryTimes(3).setTimeOut(10000).setCharset("GBK");
 
 
     @Override
@@ -62,26 +62,46 @@ public class SearchBookProcessor implements PageProcessor {
                     links().regex(BOOK_TARGET_URL_REGEX).all());
         } else {
 
+            page.putField("img", page.getHtml().xpath("//*[@id=\"search_tupian\"]/img/@src").toString());
             page.putField("shelf", page.getHtml().xpath("//*[@id=\"example1\"]/li/ul/li/table/tbody/tr[2]/td[5]/text()").toString());
-            page.putField("indexNumber", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[1]/td[2]/text()").toString());
-            page.putField("publishingHouse", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[2]/td[2]/text()").toString());
             page.putField("leftNumber", (long) page.getHtml().xpath("//*[@id=\"example1\"]/li/ul/li/table/tbody/tr").all().size() / 2);
 
 //            解析书名作者
-            for (int i = 2; i <= 10; i++) {
+            for (int i = 1; i <= 15; i++) {
 
                 String h5Key = page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[1]/text()").toString();
 
-                if (h5Key.equals("题名和责任者说明 : ")) {
+                if (h5Key == null) {
+                    break;
+                }
+
+                if ("题名和责任者说明 : ".equals(h5Key)) {
                     page.putField("bookName", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/a/text()") +
                             page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/text()").toString());
                 }
 
-                if (h5Key.equals("责任者 : ")) {
+                if ("题名 : ".equals(h5Key)) {
+                    page.putField("bookName", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/text()").toString());
+                }
+
+                if ("ISBN/ISSN : ".equals(h5Key)) {
+                    page.putField("indexNumber", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/text()").toString());
+                }
+
+                if ("出版 : ".equals(h5Key) || "出版社 : ".equals(h5Key)) {
+                    page.putField("publishingHouse", page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/text()").toString());
+                }
+
+                if ("责任者 : ".equals(h5Key)) {
 
                     List<Selectable> aAuthors = page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[" + i + "]/td[2]/a").nodes();
 
+
                     String author = "";
+
+                    if (aAuthors.size() == 0) {
+                        author += page.getHtml().xpath("//*[@id=\"s_detail_book\"]/table/tbody/tr/td[1]/table/tbody/tr[2]/td[2]/center/table/tbody/tr[2]/td[2]/text()");
+                    }
 
                     for (Selectable selectable : aAuthors) {
 
@@ -90,7 +110,6 @@ public class SearchBookProcessor implements PageProcessor {
                     }
 
                     if (author != null) {
-                        System.out.println("author is not null");
                         page.putField("author", author);
                     }
                 }

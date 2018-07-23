@@ -7,7 +7,7 @@ import com.xiyou3g.xiyouhelper.web.service.IBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,6 +45,12 @@ public class BookController {
 
         return bookService.getMyBorrowedBooks(barcode);
 
+    }
+
+    @PostMapping("/renew")
+    public ServerResponse<String> renew(String barcode, String bookCode) {
+
+        return bookService.renew(barcode, bookCode);
     }
 
 }
