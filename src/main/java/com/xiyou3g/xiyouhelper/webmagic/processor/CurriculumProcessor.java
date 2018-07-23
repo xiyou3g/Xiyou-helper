@@ -10,27 +10,23 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.*;
 
 /**
- * mengchen
- * 18-7-20 上午9:30
+ * @author mengchen
+ * @date 18-7-20 上午9:30
  */
 public class CurriculumProcessor implements PageProcessor {
 
     private String curriculumUrl = "http://222.24.62.120/xskbcx.aspx?xh=04161031&xm=%C3%CF%B3%BF&gnmkdm=N121603";
-    private String sessionId = "wkxkuj55m4hu4n45r4cksl55";
+    private String sessionId = "m0k0yx45gcgy3gv0opy1r12n";
     private String year = "2017-2018";
     private String term = "1";
 
-
-    private static List<Course> courses = new ArrayList<>();
 
     private Site site = Site.me()
             .setDomain(XYE_HOST)
@@ -41,25 +37,8 @@ public class CurriculumProcessor implements PageProcessor {
     @Override
     public void process(Page page) {
         Html html = new Html(page.getRawText(), "http://222.24.62.120/xskbcx.aspx?xh=04161031&xm=%C3%CF%B3%BF&gnmkdm=N121603");
-        for (int i = 2; i < 15; i++) {
-            for (int j = 3; j < 10; j++) {
-                String courseNode = html.xpath("/html/body/form/div/div/span/table[2]/tbody/tr[" + i +"]/td[" + j + "]").get();
-                if (courseNode == null ||courseNode.trim() == "") {
-                    continue;
-                }
-                if (courseNode == "<td align=\"Center\">&nbsp;</td>" || courseNode.equals("<td align=\"Center\">&nbsp;</td>")) {
-                    continue;
-                }
+        String courseNode = html.xpath("/html/body/form/div/div/span/table[2]/tbody/tr[3]/td[3]").toString();
 
-                if (courseNode.indexOf("noprint") != -1) {
-                    continue;
-                }
-
-                System.out.println(courseNode + i + " " + j);
-                handlerCourse(courseNode);
-            }
-            printCourses();
-        }
     }
 
     private void printCourses() {

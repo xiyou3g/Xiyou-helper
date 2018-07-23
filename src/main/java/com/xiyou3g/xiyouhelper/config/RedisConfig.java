@@ -3,20 +3,24 @@ package com.xiyou3g.xiyouhelper.config;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
+
+
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 
 /**
  * @author zeng
  */
 @Configuration
 public class RedisConfig {
+
     /**
      * 注入 RedisConnectionFactory
      */
@@ -50,4 +54,5 @@ public class RedisConfig {
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
+
 }

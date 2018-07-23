@@ -44,8 +44,12 @@ public class EduOkHttp {
         formBodyBuilder.add(LOGIN_TYPE, LOGIN_TYPE_STUDENT);
         formBodyBuilder.add(LOGIN_HIDDEN_NAME2, LOGIN_HIDDEN_VALUE2);
         RequestBody requestBody = formBodyBuilder.build();
-        Request loginRequest = new Request.Builder().url(LOGIN_URL).post(requestBody).
-                addHeader("Cookie",XYE_SESSION_KEY + "=" +  sessionId).build();
+        Request loginRequest = new Request
+                .Builder()
+                .url(LOGIN_URL)
+                .post(requestBody)
+                .addHeader("Cookie",XYE_SESSION_KEY + "=" +  sessionId)
+                .build();
         try {
             StringBuffer stringBuffer = new StringBuffer();
             Response response = client.newCall(loginRequest).execute();

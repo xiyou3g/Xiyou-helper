@@ -1,17 +1,12 @@
 package com.xiyou3g.xiyouhelper.util.constant;
 
 /**
- * @author mengchen
- * 18-7-20 上午8:36
+ * @Author: zeng
+ * @Date: 2018/7/21 16:22
  */
-public class CommonConstant {
-    public static String XYE_HOST = "222.24.62.120";
+public class BookConstant {
 
-    public static String XYE_BASEURL = "http://222.24.62.120/";
-
-    public static String XYE_HOME_URL = "http://222.24.62.120/xs_main.aspx?xh=%s";
-
-    public static String XYE_SESSION_KEY = "ASP.NET_SessionId";
+    public static String BOOK_HOST = "222.24.3.7:8080";
 
     public static final String BOOK_LOGIN_URL = "http://222.24.3.7:8080//opac_two/include/login_app.jsp";
 
@@ -21,4 +16,7 @@ public class CommonConstant {
 
     public static final String BOOK_LOGIN_PASSWORD = "password";
 
+    public static final String BOOK_HELP_URL_REGEX = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
+
+    public static final String BOOK_TARGET_URL_REGEX = "s_detail\\.jsp\\?sid=\\w{10}";
 }
