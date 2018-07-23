@@ -4,7 +4,7 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.dao.UserMapper;
 import com.xiyou3g.xiyouhelper.model.Book;
 import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
-import com.xiyou3g.xiyouhelper.processor.BookProcessor;
+import com.xiyou3g.xiyouhelper.processor.SearchBookProcessor;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IBookService;
@@ -59,7 +59,7 @@ public class BookService implements IBookService {
             return ServerResponse.createByErrorMsg("身份认证失效，请重新登录");
         }
 
-        BookProcessor bookProcessor = new BookProcessor(sessionId, suchenType, suchenWord, libraryId);
+        SearchBookProcessor bookProcessor = new SearchBookProcessor(sessionId, suchenType, suchenWord, libraryId);
 
         List<Book> booksResponse = bookProcessor.searchBooks();
 
