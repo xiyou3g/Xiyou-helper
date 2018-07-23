@@ -1,9 +1,12 @@
 package com.xiyou3g.xiyouhelper.web.controller;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
+import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
 import com.xiyou3g.xiyouhelper.okhttp.EduOkHttp;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
+import com.xiyou3g.xiyouhelper.web.service.IUserService;
+import com.xiyou3g.xiyouhelper.webmagic.processor.UserMessageProcessor;
 import okhttp3.Call;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +44,13 @@ public class EduController {
 
     @Autowired
     private SessionUtil sessionUtil;
+
+
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private UserMessageProcessor userMessageProcessor;
 
     /**
      * 转发验证码
@@ -95,17 +106,25 @@ public class EduController {
     }
 
     @PostMapping("/xiyou_edu_sys/login")
-    public ServerResponse<String> simulationLogin(String studetnNum, String password,
-                                                  String validateCode, String equipmentId) {
+    public ServerResponse<String> simulationLogin(String studentNum, String password,
+                                                  String validateCode, String equipmentId, HttpSession session) {
         String sessionId = sessionUtil.getSessionId(PrefixEnum.XYEDU.getDesc(), equipmentId);
         System.out.println(sessionId);
         int status;
         if (sessionId != null) {
-            status = eduOkHttp.handlerSimulationLogin(studetnNum, password, validateCode, sessionId);
+            status = eduOkHttp.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
         } else {
             status = -1;
         }
         if (status == 0) {
+            // 如果数据库中有信息就不用爬取了
+            if (!userService.isExist(studentNum)) {
+                userMessageProcessor.execute(studentNum, sessionId);
+            }
+            SimpleUser user = new SimpleUser(studentNum, userService.getNameBySid(studentNum));
+            session.setAttribute("user", user);
+            sessionUtil.setSessionIdLong(PrefixEnum.XYEDU.getDesc(), studentNum, sessionId);
+            sessionUtil.removeSessionId(PrefixEnum.XYEDU.getDesc(), equipmentId);
             return ServerResponse.createBySuccessMsg("登录成功");
         } else if (status == 1) {
             return ServerResponse.createByErrorMsg(LOGIN_PASS_ERROR);

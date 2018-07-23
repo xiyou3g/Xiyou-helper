@@ -6,33 +6,16 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
   </resultMap>
-  <insert id="insert" parameterType="com.xiyou3g.xiyouhelper.model.User">
-    insert into test_user (id, user_name, password)
-    values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+  <insert id="insertUserMessage" keyColumn="sid" keyProperty="sid">
+    INSERT INTO user_message(sid, name, gender, college, major, adclass, level, education)
+    VALUES(#{sid}, #{name}, #{gender}, #{college}, #{major}, #{adclass}, #{level}, #{education})
   </insert>
-  <insert id="insertSelective" parameterType="com.xiyou3g.xiyouhelper.model.User">
-    insert into test_user
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="userName != null">
-        user_name,
-      </if>
-      <if test="password != null">
-        password,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="userName != null">
-        #{userName,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+
+  <select id="getNameBySid" resultType="Stringfggggggggggggggftttttttg">
+    SELECT name FROM user_message WHERE sid = #{sid}
+  </select>
+
+  <select id="isExist" resultType="Integer">
+    SELECT COUNT(*) FROM user_message WHERE sid = #{sid}
+  </select>
 </mapper>

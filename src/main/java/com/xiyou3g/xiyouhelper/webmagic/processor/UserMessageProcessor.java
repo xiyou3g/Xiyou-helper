@@ -1,7 +1,8 @@
 package com.xiyou3g.xiyouhelper.webmagic.processor;
-
 import com.xiyou3g.xiyouhelper.model.User;
+import com.xiyou3g.xiyouhelper.webmagic.pipeline.UserMessagePipeline;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -20,22 +21,23 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 @Component
 public class UserMessageProcessor implements PageProcessor {
 
+
+    @Autowired
+    private UserMessagePipeline pipeline;
+
     private String sessionId;
     private String studentNum;
 
     private boolean simpleFlag = true;
     private User user;
 
-    private Site site = Site.me()
-            .setDomain(XYE_HOST)
-            .addHeader("Host", XYE_HOST)
-            .addHeader("Referer", "http://222.24.62.120/xskbcx.aspx")
-            .addCookie("ASP.NET_SessionId", "b23wm255nsvilq45sktezp45");
+    private Site site;
 
     @Override
     public void process(Page page) {
         if (simpleFlag) {
             Html html = new Html(page.getRawText());
+            System.out.println(html);
             String simpleUserMessageUrl = html.xpath("/html/body/div/div[1]/ul/li[5]/ul/li[1]/a/@href").get();
             handlerSimpleUserMessage(user, simpleUserMessageUrl);
             page.addTargetRequest(XYE_BASEURL + simpleUserMessageUrl);
@@ -68,7 +70,6 @@ public class UserMessageProcessor implements PageProcessor {
         String[] messages = temp.split("&");
         user.setSid(messages[0].substring(messages[0].indexOf('=') + 1));
         user.setName(messages[1].substring(messages[1].indexOf('=') + 1));
-        user.setGnmkdm(messages[2].substring(messages[2].indexOf('=') + 1));
     }
 
 
@@ -77,21 +78,6 @@ public class UserMessageProcessor implements PageProcessor {
         return site;
     }
 
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public String getStudentNum() {
-        return studentNum;
-    }
-
-    public void setStudentNum(String studentNum) {
-        this.studentNum = studentNum;
-    }
 
     public User getUser() {
         return user;
@@ -108,5 +94,20 @@ public class UserMessageProcessor implements PageProcessor {
         System.out.println(url);
         Spider.create(messageProcessor).addUrl(url).run();
         System.out.println(messageProcessor.user);
+    }
+
+    public void execute(String studentNum, String sessionId) {
+        this.simpleFlag = true;
+        this.sessionId = sessionId;
+        this.user = new User();
+        site = Site.me()
+                .setDomain(XYE_HOST)
+                .addHeader("Host", XYE_HOST)
+                .addHeader("Referer", "http://222.24.62.120/xskbcx.aspx")
+                .addCookie("ASP.NET_SessionId", sessionId);
+        System.out.println(sessionId);
+        String url = String.format(XYE_HOME_URL, studentNum);
+        Spider.create(this).addPipeline(pipeline).addUrl(url).thread(10).run();
+
     }
 }
