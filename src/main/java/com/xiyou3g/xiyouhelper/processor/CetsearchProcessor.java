@@ -14,14 +14,14 @@ import us.codecraft.webmagic.selector.Html;
 public class CetsearchProcessor implements PageProcessor {
 
     private String cetsearchUrl
-            = "https://www.chsi.com.cn/cet/query?zkzh=610151172115428&xm=%E6%9D%9C%E6%B3%BD%E6%B1%9F&yzm=404";
+            = "https://www.chsi.com.cn/cet/query?zkzh=610151172115428&xm=%E6%9D%9C%E6%B3%BD%E6%B1%9F&yzm=24";
 
 
     private Site site = Site.me()
             .setDomain("www.chsi.com.cn")
             .addHeader("Host", "www.chsi.com.cn")
             .addHeader("Referer", "https://www.chsi.com.cn/cet/")
-            .addCookie("JSESSIONID", "885E9E888B933A99B3D9488B91339B26");
+            .addCookie("JSESSIONID", "865AC8A02FDD4D925BE5CCEB4DC49A4A");
 
     @Override
     public void process(Page page) {

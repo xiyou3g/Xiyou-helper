@@ -1,7 +1,5 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.webmagic.processor;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -15,7 +13,6 @@ import us.codecraft.webmagic.utils.HttpConstant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.TERM;
 import static com.xiyou3g.xiyouhelper.util.constant.CurriculumConstant.YEAR;
