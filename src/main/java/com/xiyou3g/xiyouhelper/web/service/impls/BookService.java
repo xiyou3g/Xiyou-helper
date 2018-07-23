@@ -44,7 +44,9 @@ public class BookService implements IBookService {
 
         sessionUtil.setSessionId(PrefixEnum.Book.getDesc(), barcode, sessionId);
 
+
         // TODO: 2018/7/20 账户密码持久到数据库
+
 
         return ServerResponse.createBySuccessMsg("登录成功");
     }
