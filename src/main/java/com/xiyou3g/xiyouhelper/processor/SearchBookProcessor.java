@@ -26,7 +26,7 @@ import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_TARGET_URL
  * @Author: zeng
  * @Date: 2018/7/20 20:04
  */
-public class BookProcessor implements PageProcessor {
+public class SearchBookProcessor implements PageProcessor {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -36,21 +36,15 @@ public class BookProcessor implements PageProcessor {
     private String libraryId;
 
 
-    public BookProcessor(String sessionId, String suchenType, String suchenWord, String libraryId) {
+    public SearchBookProcessor(String sessionId, String suchenType, String suchenWord, String libraryId) {
         this.sessionId = sessionId;
         this.suchenType = suchenType;
         this.suchenWord = suchenWord;
         this.libraryId = libraryId;
     }
 
-    private Site site = Site.me()
-            .setCharset("GBK")
-            .setDomain(BOOK_HOST)
-            .addHeader("Host", BOOK_HOST)
-            .addHeader("Cookie", this.sessionId)
-            .addHeader("Referer", "http://222.24.3.7:8080/opac_two/search2/search_simple.jsp?search_no_type=Y&snumber_type=Y&show_type=Z")
-            .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36")
-            .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+    private Site site = Site.me().setRetryTimes(3).setTimeOut(10000);
+
 
     @Override
     public void process(Page page) {
@@ -109,6 +103,13 @@ public class BookProcessor implements PageProcessor {
 
         Request request = new Request("http://222.24.3.7:8080/opac_two/search2/searchout.jsp");
         request.setMethod(HttpConstant.Method.POST);
+
+        request.setCharset("GBK")
+                .addHeader("Host", BOOK_HOST)
+                .addHeader("Cookie", this.sessionId)
+                .addHeader("Referer", "http://222.24.3.7:8080/opac_two/search2/search_simple.jsp?search_no_type=Y&snumber_type=Y&show_type=Z")
+                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36")
+                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
 
         Map<String,Object> params = new HashMap<>();
         logger.info("suchen type " + this.suchenType);
