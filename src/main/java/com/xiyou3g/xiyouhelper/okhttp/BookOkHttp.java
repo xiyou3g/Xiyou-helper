@@ -5,9 +5,10 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.BOOK_LOGIN_PASSWORD;
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.BOOK_LOGIN_URL;
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.BOOK_LOGIN_USERNAME;
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_LOGIN_PASSWORD;
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_LOGIN_URL;
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_LOGIN_USERNAME;
+
 
 /**
  * @author zeng

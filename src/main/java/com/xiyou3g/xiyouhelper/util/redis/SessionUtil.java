@@ -20,13 +20,17 @@ public class SessionUtil {
             return false;
         }
 
-        redisTemplate.opsForValue().set(prefix + barcode, sessionId);
+        String finalKey = prefix + barcode;
+
+        redisTemplate.opsForValue().set(finalKey, sessionId);
         return true;
     }
 
-    public String getSessionId(String key) {
+    public String getSessionId(String prefix, String key) {
 
-        return (String) redisTemplate.opsForValue().get(key);
+        String finalKey = prefix + key;
+
+        return (String) redisTemplate.opsForValue().get(finalKey);
     }
 
     public String getSessionId(String prefix, String barcode) {

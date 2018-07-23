@@ -2,17 +2,26 @@ package com.xiyou3g.xiyouhelper.model;
 
 /**
  * @Author: zeng
- * @Date: 2018/7/20 19:29
+ * @Date: 2018/7/22 9:01
  */
-public class Book {
+public class BookStatus {
 
     private String bookName;
     private String author;
     private String publishingHouse;
-    private String shelf;
     private String indexNumber;
-    private Long leftNumber;
+    private String borrowDay;
+    private String shouldReturnDay;
+    private String bookCode;
+    private String status;
 
+    public String getBookCode() {
+        return bookCode;
+    }
+
+    public void setBookCode(String bookCode) {
+        this.bookCode = bookCode;
+    }
 
     public String getBookName() {
         return bookName;
@@ -38,14 +47,6 @@ public class Book {
         this.publishingHouse = publishingHouse;
     }
 
-    public String getShelf() {
-        return shelf;
-    }
-
-    public void setShelf(String shelf) {
-        this.shelf = shelf;
-    }
-
     public String getIndexNumber() {
         return indexNumber;
     }
@@ -54,11 +55,27 @@ public class Book {
         this.indexNumber = indexNumber;
     }
 
-    public Long getLeftNumber() {
-        return leftNumber;
+    public String getBorrowDay() {
+        return borrowDay;
     }
 
-    public void setLeftNumber(Long leftNumber) {
-        this.leftNumber = leftNumber;
+    public void setBorrowDay(String borrowDay) {
+        this.borrowDay = borrowDay;
+    }
+
+    public String getShouldReturnDay() {
+        return shouldReturnDay;
+    }
+
+    public void setShouldReturnDay(String shouldReturnDay) {
+        this.shouldReturnDay = shouldReturnDay;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
