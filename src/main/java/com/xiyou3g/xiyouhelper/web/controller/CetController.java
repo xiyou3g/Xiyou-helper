@@ -42,6 +42,10 @@ public class CetController {
      */
     @GetMapping("/cet_sys/validate_code")
     public void sendValidateCode(HttpServletResponse response, String equipmentId) {
+        if (equipmentId == null) {
+           response.setStatus(400);
+           return;
+        }
         // 如果sessionId == null，flag = false;
         boolean flag = false;
         // 从redis中取出sessionId
