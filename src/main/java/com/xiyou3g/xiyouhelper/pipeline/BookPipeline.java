@@ -20,6 +20,7 @@ public class BookPipeline implements Pipeline {
     public void process(ResultItems resultItems, Task task) {
 
         Book book = new Book();
+        book.setBookImgUrl(resultItems.get("img"));
         book.setShelf(resultItems.get("shelf"));
         book.setPublishingHouse(resultItems.get("publishingHouse"));
         book.setLeftNumber(resultItems.get("leftNumber"));

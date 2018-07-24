@@ -19,4 +19,12 @@ public class BookConstant {
     public static final String BOOK_HELP_URL_REGEX = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
 
     public static final String BOOK_TARGET_URL_REGEX = "s_detail\\.jsp\\?sid=\\w{10}";
+
+    public static final String BOOK_RENEW_ACTION = "action";
+
+    public static final String BOOK_RENEW_BARCODE = "book_barcode";
+
+    public static final String DEPARTMENT_ID = "department_id";
+
+    public static final String LIBRARY_ID = "library_id";
 }

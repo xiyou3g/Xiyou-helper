@@ -14,6 +14,7 @@ import us.codecraft.webmagic.utils.HttpConstant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_BORROWED_URL;
 import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_HOST;
 
 /**
@@ -27,6 +28,8 @@ public class BorrowedBookListProcessor implements PageProcessor {
 
     private String sessionId;
 
+    private Site site = Site.me().setRetryTimes(3).setTimeOut(10000).setCharset("GBK");
+
     private List<BookStatus> borrowedBooks;
 
 
@@ -34,7 +37,7 @@ public class BorrowedBookListProcessor implements PageProcessor {
         this.sessionId = sessionId;
     }
 
-    private Site site = Site.me().setRetryTimes(3).setTimeOut(10000);
+
 
 
     @Override
@@ -63,9 +66,9 @@ public class BorrowedBookListProcessor implements PageProcessor {
             bookStatus.setBookName(
                     page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
             bookStatus.setShouldReturnDay(
-                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i +"]/td[7]").toString());
+                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i +"]/td[7]/text()").toString());
             bookStatus.setBookCode(
-                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[4]").toString());
+                    page.getHtml().xpath("/html/body/form[1]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
 
             this.borrowedBooks.add(bookStatus);
         }
@@ -80,7 +83,7 @@ public class BorrowedBookListProcessor implements PageProcessor {
 
     public List<BookStatus> getMyBorrowedBooks() {
 
-        Request request = new Request("http://222.24.3.7:8080/opac_two/reader/jieshuxinxi.jsp");
+        Request request = new Request(BOOK_BORROWED_URL);
         request.setMethod(HttpConstant.Method.GET);
 
         request.setCharset("GBK")
@@ -98,12 +101,6 @@ public class BorrowedBookListProcessor implements PageProcessor {
         return this.borrowedBooks;
 
     }
-
-
-    public void getMoreInfos() {
-
-    }
-
 
 
     public Logger getLogger() {
@@ -133,4 +130,5 @@ public class BorrowedBookListProcessor implements PageProcessor {
     public void setBorrowedBooks(List<BookStatus> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
+
 }

@@ -48,7 +48,6 @@ public class SessionUtil {
     }
 
 
-
     public boolean removeSessionId(String prefix, String key) {
         String finalKey = prefix + key;
 
