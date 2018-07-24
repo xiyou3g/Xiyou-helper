@@ -7,7 +7,9 @@ import com.xiyou3g.xiyouhelper.model.User;
  */
 public interface UserMapper {
 
-    int insert(User record);
+    int insertUserMessage(User user);
 
-    int insertSelective(User record);
+    String getNameBySid(String sid);
+
+    int isExist(String sid);
 }

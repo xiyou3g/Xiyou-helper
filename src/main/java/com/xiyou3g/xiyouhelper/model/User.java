@@ -1,7 +1,6 @@
 package com.xiyou3g.xiyouhelper.model;
 
 /**
- *
  * @author mengchen
  */
 public class User {
@@ -15,10 +14,6 @@ public class User {
      */
     private String name;
 
-    /**
-     * 不知道是啥的东西，反正要用
-     */
-    private String gnmkdm;
 
     /**
      * 性别
@@ -74,14 +69,6 @@ public class User {
         this.name = name;
     }
 
-    public String getGnmkdm() {
-        return gnmkdm;
-    }
-
-    public void setGnmkdm(String gnmkdm) {
-        this.gnmkdm = gnmkdm;
-    }
-
     public Integer getGender() {
         return gender;
     }
@@ -127,7 +114,6 @@ public class User {
         return "User{" +
                 "sid='" + sid + '\'' +
                 ", name='" + name + '\'' +
-                ", gnmkdm='" + gnmkdm + '\'' +
                 ", gender=" + gender +
                 ", college='" + college + '\'' +
                 ", major='" + major + '\'' +

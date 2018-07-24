@@ -1,7 +1,10 @@
 package com.xiyou3g.xiyouhelper.web.service.impls;
 
+import com.xiyou3g.xiyouhelper.dao.UserMapper;
+import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.selector.Html;
 
@@ -15,6 +18,12 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.LOGIN_VALIDATE_C
  */
 @Service
 public class UserService implements IUserService {
+
+
+    @Autowired
+    private UserMapper userMapper;
+
+
     /**
      * 检测登录结果
      * - 0 登录成功
@@ -41,6 +50,21 @@ public class UserService implements IUserService {
             return 3;
         }
         return -1;
+    }
+
+    @Override
+    public boolean saveUserMessage(User user) {
+        return userMapper.insertUserMessage(user) == 1;
+    }
+
+    @Override
+    public String getNameBySid(String sid) {
+        return userMapper.getNameBySid(sid);
+    }
+
+    @Override
+    public boolean isExist(String sid) {
+        return userMapper.isExist(sid) == 1;
     }
 
 }
