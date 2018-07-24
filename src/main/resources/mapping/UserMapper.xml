@@ -11,7 +11,7 @@
     VALUES(#{sid}, #{name}, #{gender}, #{college}, #{major}, #{adclass}, #{level}, #{education})
   </insert>
 
-  <select id="getNameBySid" resultType="Stringfggggggggggggggftttttttg">
+  <select id="getNameBySid" resultType="String">
     SELECT name FROM user_message WHERE sid = #{sid}
   </select>
 

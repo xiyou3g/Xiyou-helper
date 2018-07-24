@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.webmagic.processor;
+package com.xiyou3g.xiyouhelper.processor;
 
 import com.xiyou3g.xiyouhelper.model.Course;
 import us.codecraft.webmagic.Page;
@@ -13,7 +13,6 @@ import us.codecraft.webmagic.utils.HttpConstant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;

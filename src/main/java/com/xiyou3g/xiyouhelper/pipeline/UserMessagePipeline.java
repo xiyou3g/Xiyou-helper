@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.webmagic.pipeline;
+package com.xiyou3g.xiyouhelper.pipeline;
 
 import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;

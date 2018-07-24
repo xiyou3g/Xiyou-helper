@@ -1,6 +1,6 @@
-package com.xiyou3g.xiyouhelper.webmagic.processor;
+package com.xiyou3g.xiyouhelper.processor;
 import com.xiyou3g.xiyouhelper.model.User;
-import com.xiyou3g.xiyouhelper.webmagic.pipeline.UserMessagePipeline;
+import com.xiyou3g.xiyouhelper.pipeline.UserMessagePipeline;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,6 @@ public class UserMessageProcessor implements PageProcessor {
     public void process(Page page) {
         if (simpleFlag) {
             Html html = new Html(page.getRawText());
-            System.out.println(html);
             String simpleUserMessageUrl = html.xpath("/html/body/div/div[1]/ul/li[5]/ul/li[1]/a/@href").get();
             handlerSimpleUserMessage(user, simpleUserMessageUrl);
             page.addTargetRequest(XYE_BASEURL + simpleUserMessageUrl);
@@ -87,14 +86,6 @@ public class UserMessageProcessor implements PageProcessor {
         this.user = user;
     }
 
-    public static void main(String[] args) {
-        String url = String.format(XYE_HOME_URL, "04161031");
-        UserMessageProcessor messageProcessor = new UserMessageProcessor();
-        messageProcessor.setUser(new User());
-        System.out.println(url);
-        Spider.create(messageProcessor).addUrl(url).run();
-        System.out.println(messageProcessor.user);
-    }
 
     public void execute(String studentNum, String sessionId) {
         this.simpleFlag = true;
