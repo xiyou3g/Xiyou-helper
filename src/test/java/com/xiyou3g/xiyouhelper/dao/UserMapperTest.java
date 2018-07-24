@@ -15,16 +15,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class UserMapperTest {
 
-//    @Autowired
-//    private UserMapper userMapper;
-//
-//    @Test
-//    public void whenInsertUser() {
-//        User user = new User();
-//        user.setUserName("pipiap");
-//        user.setPassword("123456");
-//        userMapper.insert(user);
-//    }
+   /* @Autowired
+    private UserMapper userMapper;
+
+    @Test
+    public void whenInsertUser() {
+        User user = new User();
+        user.setUserName("pipiap");
+        user.setPassword("123456");
+        userMapper.insert(user);
+    }*/
 //
 //    @Test
 //    public void whenTestBranch() {

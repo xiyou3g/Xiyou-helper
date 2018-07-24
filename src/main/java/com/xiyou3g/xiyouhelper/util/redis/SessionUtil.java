@@ -33,7 +33,4 @@ public class SessionUtil {
         return (String) redisTemplate.opsForValue().get(finalKey);
     }
 
-    public String getSessionId(String prefix, String barcode) {
-        return getSessionId(prefix + barcode);
-    }
 }

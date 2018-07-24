@@ -1,6 +1,7 @@
 package com.xiyou3g.xiyouhelper.processor;
 
 import com.xiyou3g.xiyouhelper.model.Achievement;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -8,6 +9,7 @@ import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Selectable;
 import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.UnsupportedEncodingException;
@@ -15,30 +17,25 @@ import java.util.*;
 
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
+import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
  * 爬取成绩
  */
+@Component
 public class AchievementProcessor implements PageProcessor {
 
-    private String achievementUrl = "http://222.24.62.120/xscjcx.aspx?xh=04162130&xm=%CB%EF%CF%FE%D5%DC&gnmkdm=N121605";
-    private String sessionId = "0g4tfq45bbokvtjewlhjlhud";
-    private String year = "2017-2018";
-    private String term = "2";
+    //URL
+    public String achievementUrl;
 
-
-    private static List<Achievement> achievements = new ArrayList<>();
-
-    private Site site = Site.me()
-            .setDomain(XYE_HOST)
-            .addHeader("Host", XYE_HOST)
-            .addHeader("Referer", "http://222.24.62.120/xs_main.aspx?xh=04162130")
-            .addCookie("ASP.NET_SessionId", sessionId);
-
+    //成绩集合
+    public List<Achievement> achievements = new ArrayList<>();
+    private Site site;
 
     @Override
     public void process(Page page) {
-       Html html = new Html(page.getRawText(),"http://222.24.62.120/xscjcx.aspx?xh=04162130&xm=%CB%EF%CF%FE%D5%DC&gnmkdm=N121605");
+       Html html = new Html(page.getRawText(),achievementUrl);
+       //XPath解析
        String sec = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
         try {
             //BASE664解码
@@ -76,18 +73,45 @@ public class AchievementProcessor implements PageProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        println();
+    }
+
+    @Override
+    public Site getSite() {
+        return site;
+    }
+
+    public List<Achievement> start(String name,String num,String sessionId,String year,String semester){
+
+        achievementUrl = String.format(XYE_ACH_URL, num, name);
+        site = Site.me()
+                .setDomain(XYE_HOST)
+                .addHeader("Host", XYE_HOST)
+                .addHeader("Referer", ACH_REFER)
+                .addCookie(XYE_SESSION_KEY, sessionId);
+        Map<String, Object> map = new HashMap<>();
+        map.put(NAME1, VALUE1);
+        map.put(NAME2, VALUE2);
+        map.put(NAME3, this.getHidden(name,num,sessionId));
+        map.put(YEAR, year);
+        map.put(TERM, semester);
+        map.put(CLASS,CLASS_VALUE);
+        map.put(NAME4,VALUE4);
+        String url = this.achievementUrl;
+        Request request = new Request(url);
+        request.setMethod(HttpConstant.Method.POST);
+        request.setRequestBody(HttpRequestBody.form(map, "GBK"));
+        Spider.create( this).addRequest(request).run();
+        return achievements;
     }
 
     /**
-     * 过滤无用的字符串
+     * 字符串过滤
      * @param res
      * @return
      */
     private static String handelContents(String res){
         return res.split(";>>;>;;>;t<p<p<l")[0];
     }
-
 
     /**
      * base64解码
@@ -102,34 +126,15 @@ public class AchievementProcessor implements PageProcessor {
 
         return str1;
     }
-
-
-    @Override
-    public Site getSite() {
-        return site;
+    /**
+     * 获取隐藏参数3
+     * @return
+     */
+    public  String getHidden(String name,String num,String sessionId){
+        HiddenProcessor hiddenProcessor = new HiddenProcessor();
+        hiddenProcessor.start(name,num,sessionId);
+        String result = hiddenProcessor.result;
+        return result;
     }
 
-    private void println(){
-        for (Achievement achievement : achievements){
-            System.out.println(achievement);
-        }
-    }
-
-    public static void main(String[] args) {
-        AchievementProcessor processor = new AchievementProcessor();
-        Map<String, Object> map = new HashMap<>();
-        map.put(NAME1, VALUE1);
-        map.put(NAME2, VALUE2);
-        map.put(NAME3, VALUE3);
-        map.put(YEAR, processor.year);
-        map.put(TERM, processor.term);
-        map.put(CLASS,CLASS_VALUE);
-        map.put(NAME4,VALUE4);
-        String url = processor.achievementUrl;
-        System.out.println(url);
-        Request request = new Request(url);
-        request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(map, "GBK"));
-        Spider.create(new AchievementProcessor()).addRequest(request).run();
-    }
 }
