@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiyou3g.xiyouhelper.dao.AchievementMapper">
+
+  <insert id="insertAchievement" parameterType="com.xiyou3g.xiyouhelper.model.Achievement">
+    INSERT INTO user_achievement(num, school_year, semester, classname, achievement, ordinary, point, nature, credit, finalexam)
+    VALUES(#{num}, #{school_year}, #{semester}, #{classname}, #{achievement}, #{ordinary}, #{point}, #{nature}, #{credit}, #{finalexam})
+  </insert>
+
+</mapper>

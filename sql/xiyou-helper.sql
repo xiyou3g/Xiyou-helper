@@ -18,3 +18,5 @@ CREATE TABLE user_message (
   level VARCHAR(4) NOT NULL COMMENT '级别',
   education VARCHAR(20) NOT NULL COMMENT '学历'
 );
+
+
