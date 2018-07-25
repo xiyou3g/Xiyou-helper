@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
  * 参数
  */
 @Component
-public class AchievementConstant {
+public class AchievementConstant{
 
     public static final String XYE_ACH_URL = "http://222.24.62.120/xscjcx.aspx?xh=%s&xm=%s&gnmkdm=N121605";
     public static final String NAME1 = "__EVENTTARGET";    // 隐藏的参数名1

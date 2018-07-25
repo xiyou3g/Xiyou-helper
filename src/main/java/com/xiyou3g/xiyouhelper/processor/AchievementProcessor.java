@@ -44,12 +44,15 @@ public class AchievementProcessor implements PageProcessor {
             String[] array = result.split("<Text;>;l<");
 
             for (int i = 3; i < array.length - array.length%29; i+=29){
-
                 Achievement achievement = new Achievement();
+                //设置学年
+                achievement.setSchool_year(handelContents(array[i]));
+                //设置学期
+                achievement.setSemester(handelContents(array[i+1]));
                 //设置总成绩
                 achievement.setAchievement(handelContents(array[i+12]));
                 //设置课程名字
-                achievement.setClassName(handelContents(array[i+3]));
+                achievement.setClassname(handelContents(array[i+3]));
                 //设置绩点
                 achievement.setPoint(handelContents(array[i+7]).trim());
                 //设置课程学分
@@ -75,13 +78,14 @@ public class AchievementProcessor implements PageProcessor {
         }
     }
 
+
     @Override
     public Site getSite() {
         return site;
     }
 
-    public List<Achievement> start(String name,String num,String sessionId,String year,String semester){
-
+    public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3){
+        achievements.clear();
         achievementUrl = String.format(XYE_ACH_URL, num, name);
         site = Site.me()
                 .setDomain(XYE_HOST)
@@ -91,7 +95,7 @@ public class AchievementProcessor implements PageProcessor {
         Map<String, Object> map = new HashMap<>();
         map.put(NAME1, VALUE1);
         map.put(NAME2, VALUE2);
-        map.put(NAME3, this.getHidden(name,num,sessionId));
+        map.put(NAME3, value3);
         map.put(YEAR, year);
         map.put(TERM, semester);
         map.put(CLASS,CLASS_VALUE);
@@ -101,9 +105,12 @@ public class AchievementProcessor implements PageProcessor {
         request.setMethod(HttpConstant.Method.POST);
         request.setRequestBody(HttpRequestBody.form(map, "GBK"));
         Spider.create( this).addRequest(request).run();
+
+        for (Achievement achievement : achievements){
+            achievement.setNum(num);
+        }
         return achievements;
     }
-
     /**
      * 字符串过滤
      * @param res
@@ -126,15 +133,4 @@ public class AchievementProcessor implements PageProcessor {
 
         return str1;
     }
-    /**
-     * 获取隐藏参数3
-     * @return
-     */
-    public  String getHidden(String name,String num,String sessionId){
-        HiddenProcessor hiddenProcessor = new HiddenProcessor();
-        hiddenProcessor.start(name,num,sessionId);
-        String result = hiddenProcessor.result;
-        return result;
-    }
-
 }
