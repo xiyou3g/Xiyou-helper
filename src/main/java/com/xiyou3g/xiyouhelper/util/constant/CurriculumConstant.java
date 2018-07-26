@@ -5,7 +5,6 @@ package com.xiyou3g.xiyouhelper.util.constant;
  * 18-7-20 上午8:55
  */
 public class CurriculumConstant {
-    public static final String URL = "http://222.24.62.120/xskbcx.aspx";
     public static final String XH = "xh";     // 学号
     public static final String XM = "xm";     // 学生姓名
     public static final String GNMKDM = "gnmkdm";  // ?
