@@ -1,5 +1,6 @@
 package com.xiyou3g.xiyouhelper.web.service.impls;
 
+import com.xiyou3g.xiyouhelper.model.Cetscore;
 import com.xiyou3g.xiyouhelper.web.service.ICetService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,15 @@ public class CetService implements ICetService{
      * @return
      */
     @Override
-    public int testLogin(String htmlStr) {
-        Html html = new Html(htmlStr);
+    public int testLogin(Html htmlStr) {
+        Html html = htmlStr;
         //准考证号及姓名有误
         String fault1 = html.xpath("//*[@id=\"leftH\"]/div/div[1]/text()").get();
         //验证码有误
         String fault2 = html.xpath("//*[@id=\"form1\"]/div/text()").get();
 
-        if (fault1 == null && fault2 == null){
+        System.out.println(fault1 + fault2);
+        if (fault1.indexOf("最终结果") != -1 && fault2 == null){
             return 0;
         }
         if (StringUtils.equals(fault1, LOGIN_ZKZH_NAME_ERROR)){
@@ -40,7 +42,19 @@ public class CetService implements ICetService{
         if (StringUtils.equals(fault2,LOGIN_VALIDATE_CODE_ERROR)){
             return 2;
         }
-
         return -1;
+    }
+
+    @Override
+    public Cetscore searchCet(Html html) {
+        Html html1 = html;
+
+        Cetscore cs = new Cetscore();
+        cs.setTotalscore(html.xpath("//*[@id=\"leftH\"]/div/table/tbody/tr[6]/td/span/text()").get());
+        cs.setHearing(html.xpath("//*[@id=\"leftH\"]/div/table/tbody/tr[7]/td[2]/text()").get());
+        cs.setReading(html.xpath("//*[@id=\"leftH\"]/div/table/tbody/tr[8]/td[2]/text()").get());
+        cs.setWat(html.xpath("//*[@id=\"leftH\"]/div/table/tbody/tr[9]/td[2]/text()").get());
+        cs.setKslevel(html.xpath("//*[@id=\"leftH\"]/div/table/tbody/tr[12]/td/text()").get());
+        return cs;
     }
 }
