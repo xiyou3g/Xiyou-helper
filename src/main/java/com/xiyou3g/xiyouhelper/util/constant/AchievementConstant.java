@@ -16,6 +16,8 @@ public class AchievementConstant{
     public static final String NAME3 = "__VIEWSTATE";  // 隐藏的参数名3
     public static final String NAME4 = "btn_xq";  //隐藏的参数名4
     public static final String VALUE4 = "学期成绩";  //隐藏的参数值4
+    public static final String NAME5 = "Button1";  //隐藏的参数名4
+    public static final String VALUE5 = "成绩统计";  //隐藏的参数值4
     public static final String YEAR = "ddlXN";    // 年份，例如 2017-2018
     public static final String TERM = "ddlXQ";    // 学期，例如 1
     public static final String CLASS = "ddl_kcxz";//课程性质
