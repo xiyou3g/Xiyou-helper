@@ -48,9 +48,12 @@ public class SessionUtil {
     }
 
 
+<<<<<<< Temporary merge branch 1
+=======
     public boolean removeSessionId(String prefix, String key) {
         String finalKey = prefix + key;
 
         return redisTemplate.delete(finalKey);
     }
+>>>>>>> Temporary merge branch 2
 }
