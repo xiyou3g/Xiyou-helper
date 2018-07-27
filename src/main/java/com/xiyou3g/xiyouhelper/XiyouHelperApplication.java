@@ -9,7 +9,6 @@ import org.springframework.cache.annotation.EnableCaching;
 /**
  * @author mengchen
  */
-
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 @MapperScan("com.xiyou3g.xiyouhelper.dao")
 @EnableCaching

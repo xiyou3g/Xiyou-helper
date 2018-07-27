@@ -1,5 +1,7 @@
 package com.xiyou3g.xiyouhelper.model;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 成绩实体类
  */

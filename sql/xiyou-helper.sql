@@ -18,3 +18,10 @@ CREATE TABLE user_message (
   level VARCHAR(4) NOT NULL COMMENT '级别',
   education VARCHAR(20) NOT NULL COMMENT '学历'
 );
+
+# 用户密码表
+CREATE TABLE user_password (
+  sid VARCHAR(8) PRIMARY KEY COMMENT 'uid=学号',
+  edu_system VARCHAR(20) DEFAULT NULL COMMENT '教务系统密码',
+  book_system VARCHAR(20) DEFAULT NULL COMMENT '图书馆密码'
+) engine = InnoDB charset = utf8;
