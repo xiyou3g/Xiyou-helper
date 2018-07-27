@@ -1,45 +1,67 @@
 package com.xiyou3g.xiyouhelper.processor;
 
 import com.xiyou3g.xiyouhelper.model.Achievement;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.HttpRequestBody;
-import us.codecraft.webmagic.processor.PageProcessor;
+import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selectable;
-import us.codecraft.webmagic.utils.HttpConstant;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.*;
 
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
  * 爬取成绩
  */
 @Component
-public class AchievementProcessor implements PageProcessor {
+public class AchievementProcessor{
 
     //URL
     public String achievementUrl;
 
     //成绩集合
-    public List<Achievement> achievements = new ArrayList<>();
-    private Site site;
+    public List<Achievement> achievements = Collections.synchronizedList(new ArrayList());
 
-    @Override
-    public void process(Page page) {
-       Html html = new Html(page.getRawText(),achievementUrl);
-       //XPath解析
-       String sec = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
+    public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3) throws IOException {
+        achievements.clear();
+        achievementUrl = String.format(XYE_ACH_URL, num, name);
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        formBodyBuilder.add(NAME1, VALUE1);
+        formBodyBuilder.add(NAME2, VALUE2);
+        formBodyBuilder.add(NAME3, value3);
+        formBodyBuilder.add(YEAR, year);
+        formBodyBuilder.add(TERM, semester);
+        formBodyBuilder.add(CLASS,CLASS_VALUE);
+        formBodyBuilder.add(NAME4,VALUE4);
+        Request request = new Request.Builder().url(achievementUrl)
+                            .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
+                            .addHeader("Referer",ACH_REFER)
+                            .post(formBodyBuilder.build())
+                            .build();
+
+        Response response = okHttpClient.newCall(request).execute();
+
+        InputStream inputStream = response.body().byteStream();
+        String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
+        Html html = new Html(htmlStr);
+
+        System.out.println(htmlStr);
+
+        //XPath解析
+        String sec = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
+
         try {
             //BASE664解码
-            String result = encoding(sec);
+            String result = new String(Base64.getDecoder().decode(sec));
 
             String[] array = result.split("<Text;>;l<");
 
@@ -76,41 +98,12 @@ public class AchievementProcessor implements PageProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    @Override
-    public Site getSite() {
-        return site;
-    }
-
-    public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3){
-        achievements.clear();
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
-        site = Site.me()
-                .setDomain(XYE_HOST)
-                .addHeader("Host", XYE_HOST)
-                .addHeader("Referer", ACH_REFER)
-                .addCookie(XYE_SESSION_KEY, sessionId);
-        Map<String, Object> map = new HashMap<>();
-        map.put(NAME1, VALUE1);
-        map.put(NAME2, VALUE2);
-        map.put(NAME3, value3);
-        map.put(YEAR, year);
-        map.put(TERM, semester);
-        map.put(CLASS,CLASS_VALUE);
-        map.put(NAME4,VALUE4);
-        String url = this.achievementUrl;
-        Request request = new Request(url);
-        request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(map, "GBK"));
-        Spider.create( this).addRequest(request).run();
-
         for (Achievement achievement : achievements){
             achievement.setNum(num);
         }
         return achievements;
     }
+
     /**
      * 字符串过滤
      * @param res
@@ -120,17 +113,4 @@ public class AchievementProcessor implements PageProcessor {
         return res.split(";>>;>;;>;t<p<p<l")[0];
     }
 
-    /**
-     * base64解码
-     * @param result
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    public String encoding(String result) throws UnsupportedEncodingException {
-        byte[] str = Base64.getDecoder().decode(result);
-
-        String str1 = new String(str,"utf-8");
-
-        return str1;
-    }
 }

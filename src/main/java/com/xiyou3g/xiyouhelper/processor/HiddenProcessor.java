@@ -1,57 +1,37 @@
 package com.xiyou3g.xiyouhelper.processor;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.HttpRequestBody;
-import us.codecraft.webmagic.processor.PageProcessor;
+import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.utils.HttpConstant;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.ACH_REFER;
-import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.XYE_ACH_URL;
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
+import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
  * 爬取隐藏参数3
  */
 @Component
-public class HiddenProcessor implements PageProcessor {
+public class HiddenProcessor{
 
     private String achievementUrl;
-    public String result;
-    private Site site;
-
-    @Override
-    public void process(Page page) {
-        Html html = new Html(page.getRawText(),achievementUrl);
-        result = String.valueOf(html.xpath("//*[@id=\"Form1\"]/input[3]/@value"));
-    }
-
-    @Override
-    public Site getSite() {
-        return site;
-    }
-
-    public String start(String name,String num,String sessionId) {
-        result = new String("");
+    public String start(String name,String num,String sessionId) throws IOException {
         achievementUrl = String.format(XYE_ACH_URL, num, name);
-        site = Site.me()
-                .setDomain(XYE_HOST)
-                .addHeader("Host", XYE_HOST)
-                .addHeader("Referer", ACH_REFER)
-                .addCookie("ASP.NET_SessionId", sessionId);
-        Map<String, Object> map = new HashMap<>();
-        String url = achievementUrl;
-        Request request = new Request(url);
-        request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(map, "GBK"));
-        Spider.create(this).addRequest(request).run();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request =  new Request.Builder().url(achievementUrl)
+                .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
+                .addHeader("Referer",ACH_REFER)
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+        InputStream inputStream = response.body().byteStream();
+        String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
+        Html html = new Html(htmlStr);
+        String result = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
+//        sunxiaozhe is a zz
         return result;
     }
 }
