@@ -25,12 +25,8 @@ public class UserMessageProcessor implements PageProcessor {
     @Autowired
     private UserMessagePipeline pipeline;
 
-    private String sessionId;
-    private String studentNum;
-
     private boolean simpleFlag = true;
-    private User user;
-
+    private ThreadLocal<User> user = new ThreadLocal<>();
     private Site site;
 
     @Override
@@ -38,27 +34,27 @@ public class UserMessageProcessor implements PageProcessor {
         if (simpleFlag) {
             Html html = new Html(page.getRawText());
             String simpleUserMessageUrl = html.xpath("/html/body/div/div[1]/ul/li[5]/ul/li[1]/a/@href").get();
-            handlerSimpleUserMessage(user, simpleUserMessageUrl);
+            handlerSimpleUserMessage(user.get(), simpleUserMessageUrl);
             page.addTargetRequest(XYE_BASEURL + simpleUserMessageUrl);
             simpleFlag = false;
         } else {
             Html html = new Html(page.getRawText());
             String gender = html.xpath("//*[@id=\"lbl_xb\"]/text()").get();
             if (StringUtils.equals(gender, "男")) {
-                user.setGender(1);
+                user.get().setGender(1);
             } else {
-                user.setGender(0);
+                user.get().setGender(0);
             }
             String college = html.xpath("//*[@id=\"lbl_xy\"]/text()").get();
-            user.setCollege(college);
+            user.get().setCollege(college);
             String major = html.xpath("//*[@id=\"lbl_zymc\"]/text()").get();
-            user.setMajor(major);
+            user.get().setMajor(major);
             String adClass = html.xpath("//*[@id=\"lbl_xzb\"]/text()").get();
-            user.setAdclass(adClass);
+            user.get().setAdclass(adClass);
             String level = html.xpath("//*[@id=\"lbl_dqszj\"]/text()").get();
-            user.setLevel(level);
+            user.get().setLevel(level);
             String education = html.xpath("//*[@id=\"lbl_CC\"]/text()").get();
-            user.setEducation(education);
+            user.get().setEducation(education);
             page.putField("user", user);
         }
 
@@ -78,19 +74,10 @@ public class UserMessageProcessor implements PageProcessor {
     }
 
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 
     public void execute(String studentNum, String sessionId) {
         this.simpleFlag = true;
-        this.sessionId = sessionId;
-        this.user = new User();
+        this.user.set(new User());
         site = Site.me()
                 .setDomain(XYE_HOST)
                 .addHeader("Host", XYE_HOST)

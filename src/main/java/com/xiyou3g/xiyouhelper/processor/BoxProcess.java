@@ -10,10 +10,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.ACH_REFER;
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.XYE_ACH_URL;
