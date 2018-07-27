@@ -18,4 +18,16 @@
   <select id="isExist" resultType="Integer">
     SELECT COUNT(*) FROM user_message WHERE sid = #{sid}
   </select>
+  
+  <insert id="insertUserBookSystemPassword" parameterType="String">
+    INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
+  </insert>
+  
+  <insert id="insertEduBookSystemPassword" parameterType="String">
+    INSERT INTO user_password (sid, edu_system) VALUE (#{username}, #{password})
+  </insert>
+  
+  <select id="selectBookPassword" resultType="String">
+    SELECT book_system FROM user_password WHERE sid = #{username}
+  </select>
 </mapper>

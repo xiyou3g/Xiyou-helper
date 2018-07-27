@@ -1,6 +1,5 @@
 package com.xiyou3g.xiyouhelper.util.redis;
 
-import ch.qos.logback.core.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -48,12 +47,11 @@ public class SessionUtil {
     }
 
 
-<<<<<<< Temporary merge branch 1
-=======
+
     public boolean removeSessionId(String prefix, String key) {
         String finalKey = prefix + key;
 
         return redisTemplate.delete(finalKey);
     }
->>>>>>> Temporary merge branch 2
+
 }
