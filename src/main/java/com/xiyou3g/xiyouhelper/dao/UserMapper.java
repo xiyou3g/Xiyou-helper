@@ -12,4 +12,6 @@ public interface UserMapper {
     String getNameBySid(String sid);
 
     int isExist(String sid);
+
+    User getUserBySid(String sid);
 }

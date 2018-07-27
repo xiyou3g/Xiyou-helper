@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiyou3g.xiyouhelper.dao.AchievementMapper">
 
-  <insert id="insertAchievement" parameterType="com.xiyou3g.xiyouhelper.model.Achievement">
+  <insert id="insertAchievement" parameterType="Achievement">
     INSERT INTO user_achievement(num, school_year, semester, classname, achievement, ordinary, point, nature, credit, finalexam)
     VALUES(#{num}, #{school_year}, #{semester}, #{classname}, #{achievement}, #{ordinary}, #{point}, #{nature}, #{credit}, #{finalexam})
   </insert>
 
 
-  <select id="selectAchievement" resultType="com.xiyou3g.xiyouhelper.model.Achievement">
+  <select id="selectAchievement" resultType="Achievement">
     select * from user_achievement where num = #{num} and  school_year = #{school_year} and semester = #{semester}
   </select>
 
