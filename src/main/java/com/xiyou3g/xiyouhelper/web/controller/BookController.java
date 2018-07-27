@@ -1,8 +1,8 @@
 package com.xiyou3g.xiyouhelper.web.controller;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
-import com.xiyou3g.xiyouhelper.model.Book;
 import com.xiyou3g.xiyouhelper.model.BookStatus;
+import com.xiyou3g.xiyouhelper.model.SearchBookResult;
 import com.xiyou3g.xiyouhelper.web.service.IBookService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +34,9 @@ public class BookController {
     }
 
     @PostMapping("/search")
-    public ServerResponse<List<Book>> search(String barcode,
-                                             String suchenType, String suchenWord, String libraryId) {
-        return bookService.search(barcode, suchenType, suchenWord, libraryId);
+    public ServerResponse<List<SearchBookResult>> search(String suchenType,
+                                                         String suchenWord, String libraryId) {
+        return bookService.search(suchenType, suchenWord, libraryId);
     }
 
 

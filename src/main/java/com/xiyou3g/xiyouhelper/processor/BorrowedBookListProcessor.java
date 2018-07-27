@@ -3,6 +3,7 @@ package com.xiyou3g.xiyouhelper.processor;
 import com.xiyou3g.xiyouhelper.model.BookStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Site;
@@ -82,6 +83,7 @@ public class BorrowedBookListProcessor implements PageProcessor {
 
 
     public List<BookStatus> getMyBorrowedBooks() {
+
 
         Request request = new Request(BOOK_BORROWED_URL);
         request.setMethod(HttpConstant.Method.GET);

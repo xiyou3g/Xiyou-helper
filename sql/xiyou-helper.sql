@@ -19,6 +19,13 @@ CREATE TABLE user_message (
   education VARCHAR(20) NOT NULL COMMENT '学历'
 );
 
+CREATE TABLE user_password (
+  sid VARCHAR(8) PRIMARY KEY COMMENT 'uid=学号',
+  edu_system VARCHAR(20) DEFAULT NULL COMMENT '教务系统密码',
+  book_system VARCHAR(20) DEFAULT NULL COMMENT '图书馆密码'
+) engine = InnoDB charset = utf8;
+
+
 #学生成绩表
 CREATE TABLE `user_achievement` (
   `num` VARCHAR(10) NOT NULL,
@@ -56,3 +63,4 @@ CREATE TABLE `train_plan_status` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `train_plan` (`major`, `level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
