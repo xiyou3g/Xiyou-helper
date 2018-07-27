@@ -1,37 +1,48 @@
 package com.xiyou3g.xiyouhelper.processor;
-
 import com.xiyou3g.xiyouhelper.model.Choice;
 import com.xiyou3g.xiyouhelper.model.Essential;
 import com.xiyou3g.xiyouhelper.model.Total;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.Page;
-import us.codecraft.webmagic.Request;
-import us.codecraft.webmagic.Site;
-import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.HttpRequestBody;
-import us.codecraft.webmagic.processor.PageProcessor;
+import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.utils.HttpConstant;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
-import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_HOST;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 @Component
-public class TotalProcess implements PageProcessor {
-
+public class TotalProcess {
 
     public String achievementUrl;
     public Total total = new Total();
-    private Site site;
+    public Total start(String name, String num, String sessionId, String value3) throws IOException {
+        achievementUrl = String.format(XYE_ACH_URL, num, name);
 
-    @Override
-    public void process(Page page) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
+        formBodyBuilder.add(NAME1, VALUE1);
+        formBodyBuilder.add(NAME2, VALUE2);
+        formBodyBuilder.add(NAME3, value3);
+        formBodyBuilder.add(NAME5,VALUE5);
 
-        Html html = new Html(page.getRawText(),achievementUrl);
+        Request request = new Request.Builder().url(achievementUrl)
+                .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
+                .addHeader("Referer",ACH_REFER)
+                .post(formBodyBuilder.build())
+                .build();
+        Response response = okHttpClient.newCall(request).execute();
+
+        InputStream inputStream = response.body().byteStream();
+        String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
+        Html html = new Html(htmlStr);
+
         Essential essential = new Essential();
         Choice choice = new Choice();
         String src1 = html.xpath("//*[@id=\"Datagrid2\"]/tbody/tr[2]/td[2]").get();
@@ -55,41 +66,6 @@ public class TotalProcess implements PageProcessor {
         total.setAllGPA(src8.substring(src8.indexOf("：")+1,src8.length()-4));
         total.setChoice(choice);
         total.setEssential(essential);
-
-        System.out.println(total);
-        /*for (int i = 2; i<= 3; i++){
-            for (int j= 2; j < 5; j++){
-                if (j == 3){
-                    j+=1;
-                }
-                String result = html.xpath("//*[@id=\"Datagrid2\"]/tbody/tr["+i+"]/td["+j+"]").get();
-            }
-        }*/
-    }
-
-    @Override
-    public Site getSite() {
-        return site;
-    }
-
-
-    public Total start(String name, String num, String sessionId, String value3){
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
-        site = Site.me()
-                .setDomain(XYE_HOST)
-                .addHeader("Host", XYE_HOST)
-                .addHeader("Referer", ACH_REFER)
-                .addCookie(XYE_SESSION_KEY, sessionId);
-        Map<String, Object> map = new HashMap<>();
-        map.put(NAME1, VALUE1);
-        map.put(NAME2, VALUE2);
-        map.put(NAME3,value3);
-        map.put(NAME5,VALUE5);
-        String url = this.achievementUrl;
-        Request request = new Request(url);
-        request.setMethod(HttpConstant.Method.POST);
-        request.setRequestBody(HttpRequestBody.form(map, "GBK"));
-        Spider.create( this).addRequest(request).run();
         return total;
     }
 }

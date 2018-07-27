@@ -1,5 +1,6 @@
 package com.xiyou3g.xiyouhelper.eventlistener;
 
+import com.xiyou3g.xiyouhelper.processor.UserMessageProcessor;
 import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.processor.UserMessageProcessor;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;

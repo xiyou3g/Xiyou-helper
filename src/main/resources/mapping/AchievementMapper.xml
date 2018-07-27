@@ -7,4 +7,10 @@
     VALUES(#{num}, #{school_year}, #{semester}, #{classname}, #{achievement}, #{ordinary}, #{point}, #{nature}, #{credit}, #{finalexam})
   </insert>
 
+
+  <select id="selectAchievement" resultType="com.xiyou3g.xiyouhelper.model.Achievement">
+    select * from user_achievement where num = #{num} and  school_year = #{school_year} and semester = #{semester}
+  </select>
+
+
 </mapper>

@@ -21,7 +21,6 @@ CREATE TABLE user_message (
 
 #学生成绩表
 CREATE TABLE `user_achievement` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
   `num` VARCHAR(10) NOT NULL,
   `school_year` VARCHAR(10) NOT NULL,
   `semester` VARCHAR(2) NOT NULL,
@@ -32,7 +31,7 @@ CREATE TABLE `user_achievement` (
   `nature` VARCHAR(100) DEFAULT NULL,
   `credit` VARCHAR(10) DEFAULT NULL,
   `finalexam` VARCHAR(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
+  UNIQUE KEY `uc_PersonID` (`num`,`school_year`,`semester`,`classname`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 

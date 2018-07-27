@@ -6,8 +6,6 @@ package com.xiyou3g.xiyouhelper.model;
  */
 public class Achievement {
 
-    private Integer id;
-
     //学号
     private String num;
     //学年
@@ -112,7 +110,6 @@ public class Achievement {
     @Override
     public String toString() {
         return "Achievement{" +
-                "id=" + id +
                 ", num='" + num + '\'' +
                 ", school_year='" + school_year + '\'' +
                 ", semester='" + semester + '\'' +

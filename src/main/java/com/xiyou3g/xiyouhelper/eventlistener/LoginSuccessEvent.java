@@ -25,6 +25,7 @@ public class LoginSuccessEvent extends ApplicationEvent {
         this.studentNum = studentNum;
     }
 
+
     public void handlerUserMessage(UserMessageProcessor processor) {
         processor.execute(studentNum, sessionId);
     }
