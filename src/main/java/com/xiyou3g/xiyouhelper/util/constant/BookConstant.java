@@ -16,9 +16,7 @@ public class BookConstant {
 
     public static final String BOOK_LOGIN_PASSWORD = "password";
 
-    public static final String BOOK_HELP_URL_REGEX = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
-
-    public static final String BOOK_TARGET_URL_REGEX = "s_detail\\.jsp\\?sid=\\w{10}";
+    public static final String SEARCH_BOOK_URL = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
 
     public static final String BOOK_RENEW_ACTION = "action";
 

@@ -23,6 +23,7 @@ public interface UserMapper {
     int insertUserEduSystemPassword(@Param("username") String username,
                                     @Param("password") String password);
 
-    String selectBookPassword(String username);
+    String checkUserExisted(String barcode);
 
+    String getBookPassword(String barcode);
 }
