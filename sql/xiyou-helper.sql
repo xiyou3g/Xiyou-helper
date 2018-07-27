@@ -19,9 +19,24 @@ CREATE TABLE user_message (
   education VARCHAR(20) NOT NULL COMMENT '学历'
 );
 
-# 用户密码表
 CREATE TABLE user_password (
   sid VARCHAR(8) PRIMARY KEY COMMENT 'uid=学号',
   edu_system VARCHAR(20) DEFAULT NULL COMMENT '教务系统密码',
   book_system VARCHAR(20) DEFAULT NULL COMMENT '图书馆密码'
 ) engine = InnoDB charset = utf8;
+
+
+#学生成绩表
+CREATE TABLE `user_achievement` (
+  `num` VARCHAR(10) NOT NULL,
+  `school_year` VARCHAR(10) NOT NULL,
+  `semester` VARCHAR(2) NOT NULL,
+  `classname` VARCHAR(100) NOT NULL,
+  `achievement` VARCHAR(10) DEFAULT NULL,
+  `ordinary` VARCHAR(10) DEFAULT NULL,
+  `point` VARCHAR(10) DEFAULT NULL,
+  `nature` VARCHAR(100) DEFAULT NULL,
+  `credit` VARCHAR(10) DEFAULT NULL,
+  `finalexam` VARCHAR(10) DEFAULT NULL,
+  UNIQUE KEY `uc_PersonID` (`num`,`school_year`,`semester`,`classname`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;

@@ -1,6 +1,8 @@
 package com.xiyou3g.xiyouhelper.web.controller;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
+import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessEvent;
+import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessPublisher;
 import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
 import com.xiyou3g.xiyouhelper.okhttp.EduOkHttp;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
@@ -48,6 +50,10 @@ public class EduController {
     @Autowired
     private UserMessageProcessor userMessageProcessor;
 
+    @Autowired
+    LoginSuccessPublisher loginSuccessPublisher;
+
+
     /**
      * 转发验证码
      * equipment 设备
@@ -75,7 +81,7 @@ public class EduController {
             flag = true;
             logger.info("sessionId为" + sessionId);
             // 使用sessionId构建一个request
-            request = new Request.Builder().url(VALIDATE_URL).addHeader("Cookie" ,XYE_SESSION_KEY + "=" + sessionId).build();
+            request = new Request.Builder().url(VALIDATE_URL).addHeader("Cookie", XYE_SESSION_KEY + "=" + sessionId).build();
         }
         // 发送请求
         Call call = eduOkHttp.getClient().newCall(request);
@@ -115,7 +121,8 @@ public class EduController {
         if (status == 0) {
             // 如果数据库中有信息就不用爬取了
             if (!userService.isExist(studentNum)) {
-                userMessageProcessor.execute(studentNum, sessionId);
+                LoginSuccessEvent event = new LoginSuccessEvent(studentNum, sessionId);
+                loginSuccessPublisher.publishEvent(event);
             }
             SimpleUser user = new SimpleUser(studentNum, userService.getNameBySid(studentNum));
             session.setAttribute("user", user);

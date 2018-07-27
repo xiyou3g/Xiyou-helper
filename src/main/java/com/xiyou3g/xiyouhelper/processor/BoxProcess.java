@@ -1,28 +1,36 @@
 package com.xiyou3g.xiyouhelper.processor;
 
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
+import java.util.*;
+
+import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.ACH_REFER;
+import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.XYE_ACH_URL;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
- * 爬取隐藏参数3
+ * 下拉框爬取
  */
 @Component
-public class HiddenProcessor{
+public class BoxProcess {
+    //URL
+    public String achievementUrl;
 
-    private String achievementUrl;
-    public String start(String name,String num,String sessionId) throws IOException {
+    //下拉框内容
+    public List<String> boxs = Collections.synchronizedList(new ArrayList<>());
+
+    public List<String> getBox(String name, String num,String sessionId) throws IOException {
+        boxs.clear();
         achievementUrl = String.format(XYE_ACH_URL, num, name);
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request request =  new Request.Builder().url(achievementUrl)
+        okhttp3.Request request =  new okhttp3.Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)
                 .build();
@@ -30,8 +38,12 @@ public class HiddenProcessor{
         InputStream inputStream = response.body().byteStream();
         String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
         Html html = new Html(htmlStr);
-        String result = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
-//        sunxiaozhe is a zz
-        return result;
+        String box = html.xpath("//*[@id=\"ddlXN\"]").get();
+        String[] array = box.split("\">");
+        for (int i = 3; i < array.length; i++){
+            boxs.add(array[i].substring(0,9));
+        }
+        return boxs;
     }
+
 }
