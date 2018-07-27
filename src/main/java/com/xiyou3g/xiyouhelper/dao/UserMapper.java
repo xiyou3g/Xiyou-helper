@@ -14,6 +14,9 @@ public interface UserMapper {
 
     int isExist(String sid);
 
+
+    User getUserBySid(String sid);
+  
     int insertUserBookSystemPassword(@Param("username") String username,
                                      @Param("password") String password);
 
@@ -21,4 +24,5 @@ public interface UserMapper {
                                     @Param("password") String password);
 
     String selectBookPassword(String username);
+
 }

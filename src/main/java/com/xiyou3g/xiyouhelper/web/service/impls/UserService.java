@@ -67,4 +67,9 @@ public class UserService implements IUserService {
         return userMapper.isExist(sid) == 1;
     }
 
+    @Override
+    public User getUserBySid(String sid) {
+        return userMapper.getUserBySid(sid);
+    }
+
 }

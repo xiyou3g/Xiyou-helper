@@ -26,4 +26,6 @@ public interface IUserService {
     String getNameBySid(String sid);
 
     boolean isExist(String sid);
+
+    User getUserBySid(String sid);
 }

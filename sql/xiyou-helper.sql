@@ -40,3 +40,27 @@ CREATE TABLE `user_achievement` (
   `finalexam` VARCHAR(10) DEFAULT NULL,
   UNIQUE KEY `uc_PersonID` (`num`,`school_year`,`semester`,`classname`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
+# 培养计划
+CREATE TABLE `train_plan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `major` varchar(40) NOT NULL,
+  `level` varchar(4) NOT NULL,
+  `class_code` varchar(9) NOT NULL,
+  `class_name` varchar(40) NOT NULL,
+  `credit` double NOT NULL,
+  `class_character` varchar(20) NOT NULL,
+  `exam_type` varchar(5) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# 培养计划状态
+CREATE TABLE `train_plan_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `major` varchar(20) NOT NULL,
+  `level` varchar(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `train_plan` (`major`, `level`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

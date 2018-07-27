@@ -18,7 +18,11 @@
   <select id="isExist" resultType="Integer">
     SELECT COUNT(*) FROM user_message WHERE sid = #{sid}
   </select>
-  
+
+  <select id="getUserBySid" resultType="User">
+    SELECT sid, name, gender, college, major, adclass, level, education FROM user_message
+    WHERE sid = #{sid}
+
   <insert id="insertUserBookSystemPassword" parameterType="String">
     INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
   </insert>
