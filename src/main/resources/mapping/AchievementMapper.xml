@@ -2,15 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiyou3g.xiyouhelper.dao.AchievementMapper">
 
-  <insert id="insertAchievement" parameterType="Achievement">
+    <insert id="insertAchievement" parameterType="Achievement">
     INSERT INTO user_achievement(num, school_year, semester, classname, achievement, ordinary, point, nature, credit, finalexam)
     VALUES(#{num}, #{school_year}, #{semester}, #{classname}, #{achievement}, #{ordinary}, #{point}, #{nature}, #{credit}, #{finalexam})
   </insert>
 
 
-  <select id="selectAchievement" resultType="Achievement">
+    <select id="selectAchievement" resultType="Achievement">
     select * from user_achievement where num = #{num} and  school_year = #{school_year} and semester = #{semester}
   </select>
+
+    <insert id="insertAchievements">
+        INSERT INTO user_achievement(num, school_year, semester, classname, achievement, ordinary, point, nature,
+        credit, finalexam)
+        VALUES
+        <foreach collection="list" index="i" separator="," item="achivement">
+            (
+            #{achivement.num}, #{achivement.school_year}, #{achivement.semester},
+            #{achivement.classname}, #{achivement.achievement}, #{achivement.ordinary},
+            #{achivement.point}, #{achivement.nature}, #{achivement.credit}, #{achivement.finalexam}
+            )
+        </foreach>
+    </insert>
 
 
 </mapper>

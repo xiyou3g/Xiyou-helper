@@ -24,7 +24,7 @@ public class TrainPlanService implements ITrainPlanService {
 
     @Override
     public boolean saveTrainPlanService(List<TrainPlanMessage> trainPlanMessages) {
-        return trainPlanMapper.saveTrainPlans(trainPlanMessages) == 1;
+        return trainPlanMapper.insertTrainPlans(trainPlanMessages) == 1;
     }
 
     @Override
