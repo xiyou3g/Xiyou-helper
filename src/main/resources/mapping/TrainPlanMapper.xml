@@ -14,7 +14,7 @@
         <result column="examType" property="exam_type" />
     </resultMap>
     
-    <insert id="saveTrainPlans" keyColumn="id" keyProperty="id">
+    <insert id="insertTrainPlans" keyColumn="id" keyProperty="id">
         INSERT INTO train_plan(major, level, term, class_code, class_name, credit, class_character, exam_type)
         VALUES
         <foreach collection="list" item="tainPlanMessage" index="i"

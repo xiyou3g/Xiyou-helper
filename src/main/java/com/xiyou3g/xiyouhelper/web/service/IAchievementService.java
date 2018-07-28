@@ -12,9 +12,9 @@ import java.util.List;
 public interface IAchievementService {
 
     /**
-     * 爬取所有成绩存入数据库
+     * 爬取所有成绩存入
      */
-    void getAchievement(String name,String num,String sessionId) throws IOException;
+    List<Achievement> getAchievement(String name,String num,String sessionId) throws IOException;
 
     /**
      * 获取最新一学期的成绩

@@ -21,7 +21,11 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.TRAINPLAN_URL;
  */
 public class TrainPlanParse {
 
-    private OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client;
+
+    public TrainPlanParse(OkHttpClient client) {
+        this.client = client;
+    }
 
     public String getHidden(String studentNum, String name, String sessionId) throws IOException {
         String url = String.format(TRAINPLAN_URL, studentNum, name);

@@ -17,20 +17,13 @@ import static com.xiyou3g.xiyouhelper.util.constant.CetConstant.*;
 /**
  * @author du
  */
-@Component
 public class CetOkHttp {
 
-    @Autowired
-    private ICetService cetService;
 
-    private static OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10,TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .build();
+    private OkHttpClient okHttpClient;
 
-    public OkHttpClient getClient() {
-        return client;
+    public CetOkHttp(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
     }
 
     public Html handlerSimulationLogin(String zkzh, String name, String validateCode, String sessionId) {
@@ -44,7 +37,7 @@ public class CetOkHttp {
                 .build();
         try {
             StringBuffer stringBuffer = new StringBuffer();
-            Response response = client.newCall(loginRequest).execute();
+            Response response = okHttpClient.newCall(loginRequest).execute();
             byte[] bytes = new byte[1024];
             InputStream is = response.body().byteStream();
             while (is.read(bytes) != -1) {

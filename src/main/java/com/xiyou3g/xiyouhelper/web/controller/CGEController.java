@@ -1,8 +1,8 @@
 package com.xiyou3g.xiyouhelper.web.controller;
 
-import com.mysql.cj.x.protobuf.Mysqlx;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.CGEMessage;
+import com.xiyou3g.xiyouhelper.processor.CGEProcessor;
 import com.xiyou3g.xiyouhelper.util.okhttp.MyOkHttp;
 import com.xiyou3g.xiyouhelper.web.service.ICGEService;
 import okhttp3.*;
@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author mengchen
@@ -28,6 +29,9 @@ public class CGEController {
 
     @Autowired
     ICGEService service;
+
+    @Autowired
+    private OkHttpClient okHttpClient;
 
     @GetMapping("/cge/validate_code")
     public void sendValidateCode(HttpSession session, HttpServletResponse response) throws IOException {
@@ -74,6 +78,13 @@ public class CGEController {
             CGEMessage cgeMessage = service.parseCGEMessage(htmlStr);
             return ServerResponse.createBySuccess(cgeMessage);
         }
+    }
+
+    @GetMapping("/cge/getTimes")
+    public ServerResponse<Map<String, String>> getTime() throws IOException {
+        CGEProcessor cgeProcessor = new CGEProcessor(okHttpClient);
+        Map<String, String> map = cgeProcessor.parseCGETimeMap();
+        return ServerResponse.createBySuccess(map);
     }
 
 }

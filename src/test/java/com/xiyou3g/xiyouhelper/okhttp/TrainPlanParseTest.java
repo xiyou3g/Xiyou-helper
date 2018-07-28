@@ -32,10 +32,13 @@ public class TrainPlanParseTest {
     @Autowired
     private ITrainPlanService service;
 
+    @Autowired
+    private OkHttpClient okHttpClient;
+
     @Test
     public void testGetTrainPlan() throws IOException {
         Long start = System.currentTimeMillis();
-        TrainPlanParse parse = new TrainPlanParse();
+        TrainPlanParse parse = new TrainPlanParse(okHttpClient);
         List<TrainPlanMessage> messageses = parse.parseTrainPlanMessages("04162106", "和书诚", "a0psffq3leu23zvynm2ihp55");
         System.out.println("耗时：" + (System.currentTimeMillis() - start));
         messageses.stream().forEach((trainPlanMessage -> {
@@ -48,7 +51,7 @@ public class TrainPlanParseTest {
     @Test
     public void testGetHidden() throws IOException {
         Long start = System.currentTimeMillis();
-        TrainPlanParse parse = new TrainPlanParse();
+        TrainPlanParse parse = new TrainPlanParse(okHttpClient);
         parse.getHidden("04162106", "和书诚", "a0psffq3leu23zvynm2ihp55");
         System.out.println("耗时：" + (System.currentTimeMillis() - start));
     }

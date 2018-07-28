@@ -10,7 +10,7 @@ import java.util.List;
  * @time 18-7-27 上午10:49
  */
 public interface TrainPlanMapper {
-    int saveTrainPlans(List<TrainPlanMessage> trainPlanMessages);
+    int insertTrainPlans(List<TrainPlanMessage> trainPlanMessages);
 
     List<TrainPlanMessage> getTrainPlans(@Param("major") String major,
                                          @Param("level") String level,

@@ -4,12 +4,12 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessEvent;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessPublisher;
 import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
-import com.xiyou3g.xiyouhelper.okhttp.EduOkHttp;
+import com.xiyou3g.xiyouhelper.okhttp.EduLoginParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;
-import com.xiyou3g.xiyouhelper.processor.UserMessageProcessor;
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
@@ -37,8 +37,6 @@ public class EduController {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private EduOkHttp eduOkHttp;
 
     @Autowired
     private SessionUtil sessionUtil;
@@ -48,11 +46,10 @@ public class EduController {
     private IUserService userService;
 
     @Autowired
-    private UserMessageProcessor userMessageProcessor;
-
-    @Autowired
     LoginSuccessPublisher loginSuccessPublisher;
 
+    @Autowired
+    private OkHttpClient okHttpClient;
 
     /**
      * 转发验证码
@@ -63,7 +60,7 @@ public class EduController {
      */
     @GetMapping("/xiyou_edu_sys/validate_code")
     public void sendValidateCode(HttpServletResponse response, String equipmentId) {
-
+        OkHttpClient client = new OkHttpClient();
         response.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9," +
                 "image/webp,image/apng,*/*;q=0.8");
         // 如果sessionId == null，flag = false;
@@ -84,7 +81,7 @@ public class EduController {
             request = new Request.Builder().url(VALIDATE_URL).addHeader("Cookie", XYE_SESSION_KEY + "=" + sessionId).build();
         }
         // 发送请求
-        Call call = eduOkHttp.getClient().newCall(request);
+        Call call = client.newCall(request);
         try {
             // 得到响应
             Response validateCodeResponse = call.execute();
@@ -114,7 +111,8 @@ public class EduController {
         System.out.println(sessionId);
         int status;
         if (sessionId != null) {
-            status = eduOkHttp.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
+            EduLoginParse parse = new EduLoginParse(okHttpClient);
+            status = parse.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
         } else {
             status = -1;
         }
@@ -122,6 +120,7 @@ public class EduController {
             // 如果数据库中有信息就不用爬取了
             if (!userService.isExist(studentNum)) {
                 LoginSuccessEvent event = new LoginSuccessEvent(studentNum, sessionId);
+                userService.saveEduPassword(studentNum, password);
                 loginSuccessPublisher.publishEvent(event);
             }
             SimpleUser user = new SimpleUser(studentNum, userService.getNameBySid(studentNum));
@@ -139,6 +138,15 @@ public class EduController {
             return ServerResponse.createByErrorMsg("未知情况");
         }
 
+    }
+
+    @GetMapping("/xiyou_edu_sys/password")
+    public ServerResponse<String> getPassword(String studenNum) {
+        String passowrd = userService.getXYEPassword(studenNum);
+        if (passowrd == null) {
+            return ServerResponse.createByErrorMsg("密码不存在");
+        }
+        return ServerResponse.createBySuccess(passowrd);
     }
 
 }

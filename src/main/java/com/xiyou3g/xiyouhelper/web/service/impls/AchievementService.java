@@ -41,7 +41,7 @@ public class AchievementService implements IAchievementService {
 
 
     @Override
-    public void getAchievement(String name, String num, String sessionId) throws IOException {
+    public List<Achievement> getAchievement(String name, String num, String sessionId) throws IOException {
 
         String value3 = hiddenProcessor.start(name,num,sessionId);
         System.out.println(value3);
@@ -56,13 +56,7 @@ public class AchievementService implements IAchievementService {
                 }
             }
         }
-        try {
-            for (Achievement achievement : achievementList){
-                achievementMapper.insertAchievement(achievement);
-            }
-        } catch (DuplicateKeyException e) {
-            e.printStackTrace();
-        }
+        return achievementList;
     }
 
     @Override
