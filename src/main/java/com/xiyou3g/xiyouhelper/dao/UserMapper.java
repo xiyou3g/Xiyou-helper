@@ -26,4 +26,16 @@ public interface UserMapper {
     String checkUserExisted(String barcode);
 
     String getBookPassword(String barcode);
+
+    String getEduPassword(String studentNum);
+
+    int insertEduPassword(@Param("studentNum") String studentNum,
+                          @Param("password") String password);
+
+
+    int updatePassword(@Param("studentNum") String studentNum,
+                       @Param("eduPassword") String eduPassword,
+                       @Param("bookPassword") String bookPassword);
+
+    int isExistUserPassword(@Param("studentNum") String studentNum);
 }
