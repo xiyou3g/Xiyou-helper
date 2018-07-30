@@ -10,6 +10,7 @@ import com.xiyou3g.xiyouhelper.processor.BoxProcess;
 import com.xiyou3g.xiyouhelper.processor.HiddenProcessor;
 import com.xiyou3g.xiyouhelper.processor.TotalProcess;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -25,16 +26,7 @@ import java.util.List;
 public class AchievementService implements IAchievementService {
 
     @Autowired
-    private AchievementProcessor achievementProcessor;
-
-    @Autowired
-    private BoxProcess process;
-
-    @Autowired
-    private HiddenProcessor hiddenProcessor;
-
-    @Autowired
-    private TotalProcess totalProcess;
+    private OkHttpClient okHttpClient;
 
     @Resource
     private AchievementMapper achievementMapper;
@@ -43,11 +35,13 @@ public class AchievementService implements IAchievementService {
     @Override
     public List<Achievement> getAchievement(String name, String num, String sessionId) throws IOException {
 
+        HiddenProcessor hiddenProcessor = new HiddenProcessor(okHttpClient);
+        BoxProcess boxProcess = new BoxProcess(okHttpClient);
         String value3 = hiddenProcessor.start(name,num,sessionId);
-        System.out.println(value3);
         //爬取所有学年
-        List<String> lists = process.getBox(name,num,sessionId);
+        List<String> lists = boxProcess.getBox(name,num,sessionId);
         List<Achievement> achievementList = Collections.synchronizedList(new ArrayList<>());
+        AchievementProcessor achievementProcessor = new AchievementProcessor(okHttpClient);
         for (String list : lists){
             for (int i = 1;i<=2;i++){
                 List<Achievement> achievements = achievementProcessor.start(name,num,sessionId,list, String.valueOf(i),value3);
@@ -61,9 +55,11 @@ public class AchievementService implements IAchievementService {
 
     @Override
     public ServerResponse<NewAchievement> getNewAchievement(String name, String num, String sessionId) throws IOException {
+        HiddenProcessor hiddenProcessor = new HiddenProcessor(okHttpClient);
         String value3 = hiddenProcessor.start(name,num,sessionId);
         //爬取所有学年
-        List<String> lists = process.getBox(name,num,sessionId);
+        BoxProcess boxProcess = new BoxProcess(okHttpClient);
+        List<String> lists = boxProcess.getBox(name,num,sessionId);
         //成绩集合
         List<Achievement> achievements;
         //最新成绩和列表对象
@@ -72,6 +68,7 @@ public class AchievementService implements IAchievementService {
 
         //获取当前月份
         Calendar calendar = Calendar.getInstance();
+        AchievementProcessor achievementProcessor = new AchievementProcessor(okHttpClient);
         int month = 8;
         achievements = achievementProcessor.start(name,num,sessionId,lists.get(0),"2",value3);
         if (achievements.size() == 0){
@@ -104,6 +101,8 @@ public class AchievementService implements IAchievementService {
 
     @Override
     public ServerResponse<Total> getTotal(String name, String num, String sessionId) throws IOException {
+        HiddenProcessor hiddenProcessor = new HiddenProcessor(okHttpClient);
+        TotalProcess totalProcess = new TotalProcess(okHttpClient);
         String value = hiddenProcessor.start(name,num,sessionId);
         return ServerResponse.createBySuccess(totalProcess.start(name,num,sessionId,value));
     }

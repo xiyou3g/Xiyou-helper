@@ -21,19 +21,23 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_K
 /**
  * 爬取成绩
  */
-@Component
 public class AchievementProcessor{
 
     //URL
-    public String achievementUrl;
+    private String achievementUrl;
+
+    private OkHttpClient okHttpClient;
+
+    public AchievementProcessor(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
 
     //成绩集合
-    public List<Achievement> achievements = Collections.synchronizedList(new ArrayList());
+    private List<Achievement> achievements = Collections.synchronizedList(new ArrayList());
 
     public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3) throws IOException {
         achievements.clear();
         achievementUrl = String.format(XYE_ACH_URL, num, name);
-        OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add(NAME1, VALUE1);
         formBodyBuilder.add(NAME2, VALUE2);

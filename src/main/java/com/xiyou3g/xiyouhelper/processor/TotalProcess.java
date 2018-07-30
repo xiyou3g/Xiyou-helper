@@ -20,12 +20,17 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_K
 @Component
 public class TotalProcess {
 
-    public String achievementUrl;
+    private String achievementUrl;
+
+    private OkHttpClient okHttpClient;
+
+    public TotalProcess(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
+
     public Total total = new Total();
     public Total start(String name, String num, String sessionId, String value3) throws IOException {
         achievementUrl = String.format(XYE_ACH_URL, num, name);
-
-        OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add(NAME1, VALUE1);
         formBodyBuilder.add(NAME2, VALUE2);

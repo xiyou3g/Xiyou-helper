@@ -18,10 +18,15 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_K
 @Component
 public class HiddenProcessor{
 
+    private OkHttpClient okHttpClient;
+
+    public HiddenProcessor(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
+
     private String achievementUrl;
     public String start(String name,String num,String sessionId) throws IOException {
         achievementUrl = String.format(XYE_ACH_URL, num, name);
-        OkHttpClient okHttpClient = new OkHttpClient();
         Request request =  new Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)
@@ -31,7 +36,6 @@ public class HiddenProcessor{
         String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
         Html html = new Html(htmlStr);
         String result = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
-//        sunxiaozhe is a zz
         return result;
     }
 }

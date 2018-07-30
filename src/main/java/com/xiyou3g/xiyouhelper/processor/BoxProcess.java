@@ -21,15 +21,20 @@ import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_K
 @Component
 public class BoxProcess {
     //URL
-    public String achievementUrl;
+    private String achievementUrl;
 
     //下拉框内容
-    public List<String> boxs = Collections.synchronizedList(new ArrayList<>());
+    private List<String> boxs = Collections.synchronizedList(new ArrayList<>());
 
-    public List<String> getBox(String name, String num,String sessionId) throws IOException {
+    private OkHttpClient okHttpClient;
+
+    public BoxProcess(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
+    }
+
+    public List<String> getBox(String name, String num, String sessionId) throws IOException {
         boxs.clear();
         achievementUrl = String.format(XYE_ACH_URL, num, name);
-        OkHttpClient okHttpClient = new OkHttpClient();
         okhttp3.Request request =  new okhttp3.Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)
