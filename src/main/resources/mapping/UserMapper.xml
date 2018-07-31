@@ -32,7 +32,7 @@
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
 
-  <select id="getBookPassword" resultMap="String">
+  <select id="getBookPassword" resultType="String">
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
 
