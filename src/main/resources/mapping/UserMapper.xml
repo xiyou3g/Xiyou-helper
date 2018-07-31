@@ -27,11 +27,7 @@
   <insert id="insertUserBookSystemPassword" parameterType="String">
     INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
   </insert>
-  
-  <insert id="insertEduBookSystemPassword" parameterType="String">
-    INSERT INTO user_password (sid, edu_system) VALUE (#{username}, #{password})
-  </insert>
-  
+
   <select id="checkUserExisted" resultType="String">
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
@@ -39,62 +35,8 @@
   <select id="getBookPassword" resultMap="String">
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
-    <resultMap id="BaseResultMap" type="com.xiyou3g.xiyouhelper.model.User">
-        <result column="id" jdbcType="INTEGER" property="id"/>
-        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
-    </resultMap>
-    <insert id="insertUserMessage" keyColumn="sid" keyProperty="sid">
-      INSERT INTO user_message(sid, name, gender, college, major, adclass, level, education)
-      VALUES(#{sid}, #{name}, #{gender}, #{college}, #{major}, #{adclass}, #{level}, #{education})
-    </insert>
 
-    <select id="getNameBySid" resultType="String">
-      SELECT name FROM user_message WHERE sid = #{sid}
-    </select>
-
-    <select id="isExist" resultType="Integer">
-      SELECT COUNT(*) FROM user_message WHERE sid = #{sid}
-    </select>
-
-    <select id="getUserBySid" resultType="User">
-      SELECT sid, name, gender, college, major, adclass, level, education FROM user_message
-      WHERE sid = #{sid}
-    </select>
-    <insert id="insertUserBookSystemPassword" parameterType="String">
-      INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
-    </insert>
-
-    <insert id="insertEduBookSystemPassword" parameterType="String">
-      INSERT INTO user_password (sid, edu_system) VALUE (#{username}, #{password})
-    </insert>
-
-    <select id="selectBookPassword" resultType="String">
-      SELECT book_system FROM user_password WHERE sid = #{username}
-    </select>
-
-    <select id="getEduPassword" resultType="String">
-      SELECT edu_system FROM user_password WHERE sid = #{studentNum}
-    </select>
-
-    <insert id="insertEduPassword">
-        INSERT INTO user_password(sid, edu_system) VALUE (#{studentNum}, #{password})
-    </insert>
-
-    <update id="updatePassword">
-        UPDATE user_password
-        <set>
-            <if test="eduPassword != null and eduPassword != ''">
-                edu_system= #{eduPassword},
-            </if>
-            <if test="bookPassword != null and eduPassword != ''">
-                book_system = #{bookPassword},
-            </if>
-        </set>
-        WHERE sid = #{studentNum}
-    </update>
-
-    <select id="isExistUserPassword" resultType="Integer" >
-        SELECT COUNT(*) FROM user_password WHERE sid = #{studentNum}
-    </select>
+  <select id="isExistUserPassword" resultType="Integer" >
+    SELECT COUNT(*) FROM user_password WHERE sid = #{studentNum}
+   </select>
 </mapper>
