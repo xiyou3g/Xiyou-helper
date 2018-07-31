@@ -1,15 +1,11 @@
-package com.xiyou3g.xiyouhelper.okhttp;
+package com.xiyou3g.xiyouhelper.parse;
 
-import com.xiyou3g.xiyouhelper.web.service.IUserService;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.selector.Html;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
 
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.*;

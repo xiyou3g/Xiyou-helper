@@ -3,7 +3,7 @@ package com.xiyou3g.xiyouhelper.eventlistener;
 import com.xiyou3g.xiyouhelper.model.Achievement;
 import com.xiyou3g.xiyouhelper.model.TrainPlanMessage;
 import com.xiyou3g.xiyouhelper.model.User;
-import com.xiyou3g.xiyouhelper.okhttp.TrainPlanParse;
+import com.xiyou3g.xiyouhelper.parse.TrainPlanParse;
 import com.xiyou3g.xiyouhelper.processor.UserMessageParse;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;
 import com.xiyou3g.xiyouhelper.web.service.ITrainPlanService;

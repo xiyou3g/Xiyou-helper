@@ -4,7 +4,7 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessEvent;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessPublisher;
 import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
-import com.xiyou3g.xiyouhelper.okhttp.EduLoginParse;
+import com.xiyou3g.xiyouhelper.parse.EduLoginParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;

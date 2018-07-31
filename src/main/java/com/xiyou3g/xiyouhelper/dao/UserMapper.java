@@ -15,12 +15,4 @@ public interface UserMapper {
     int isExist(String sid);
 
     User getUserBySid(String sid);
-  
-    int insertUserBookSystemPassword(@Param("username") String username, @Param("password") String password);
-
-    String checkUserExisted(String barcode);
-
-    String getBookPassword(String barcode);
-
-    int isExistUserPassword(@Param("studentNum") String studentNum);
 }

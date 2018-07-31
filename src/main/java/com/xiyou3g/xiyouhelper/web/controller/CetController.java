@@ -2,7 +2,7 @@ package com.xiyou3g.xiyouhelper.web.controller;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.Cetscore;
-import com.xiyou3g.xiyouhelper.okhttp.CetOkHttp;
+import com.xiyou3g.xiyouhelper.parse.CetOkHttp;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.impls.CetService;
@@ -18,7 +18,6 @@ import us.codecraft.webmagic.selector.Html;
 
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 

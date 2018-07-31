@@ -13,7 +13,12 @@ public enum ResponseCode {
     /**
      * 失败
      */
-    ERROR(0, "ERROR");
+    ERROR(0, "ERROR"),
+
+    /**
+     * 需要登录
+     */
+    NEED_LOGIN(5, "NEED_LOGIN");
 
 
     private final int code;

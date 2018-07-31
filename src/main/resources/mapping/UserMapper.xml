@@ -24,19 +24,4 @@
     WHERE sid = #{sid}
   </select>
 
-  <insert id="insertUserBookSystemPassword" parameterType="String">
-    INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
-  </insert>
-
-  <select id="checkUserExisted" resultType="String">
-    SELECT password FROM user_password WHERE sid = #{barcode}
-  </select>
-
-  <select id="getBookPassword" resultMap="String">
-    SELECT password FROM user_password WHERE sid = #{barcode}
-  </select>
-
-  <select id="isExistUserPassword" resultType="Integer" >
-    SELECT COUNT(*) FROM user_password WHERE sid = #{studentNum}
-   </select>
 </mapper>
