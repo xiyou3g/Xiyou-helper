@@ -65,6 +65,7 @@ public class AchievementController {
     @PostMapping(value = "getAchievement")
     public ServerResponse<List<Achievement>> selectAchievement(String num,String school_year,String semester){
         return achievementService.selectAchievement(num,school_year,semester);
+
     }
 
 
