@@ -27,7 +27,7 @@ public class AchievementController {
     @Autowired
     private SessionUtil sessionUtil;
 
-    @PostMapping(value = "getNewAchievement")
+    @PostMapping(value = "get_new_achievement")
     public ServerResponse<NewAchievement> getNewAchievement(HttpSession session) throws IOException {
 
         Long start = System.currentTimeMillis();
@@ -44,7 +44,7 @@ public class AchievementController {
         }
     }
 
-    @PostMapping(value = "getTotal")
+    @PostMapping(value = "get_total")
     public ServerResponse<Total> getTotal(HttpSession session) throws IOException {
         Long start = System.currentTimeMillis();
         SimpleUser user = (SimpleUser) session.getAttribute("user");
@@ -62,7 +62,7 @@ public class AchievementController {
 
     }
 
-    @PostMapping(value = "getAchievement")
+    @PostMapping(value = "get_achievement")
     public ServerResponse<List<Achievement>> selectAchievement(String num,String school_year,String semester){
         return achievementService.selectAchievement(num,school_year,semester);
 

@@ -109,7 +109,14 @@ public class AchievementService implements IAchievementService {
 
     @Override
     public ServerResponse<List<Achievement>> selectAchievement(String num, String school_year, String semester) {
-        return ServerResponse.createBySuccess(achievementMapper.selectAchievement(num,school_year,semester));
+
+             List<Achievement> achievements = achievementMapper.selectAchievement(num,school_year,semester);
+             if (achievements.size() == 0){
+                 return ServerResponse.createByErrorMsg("查询失败！");
+             }else {
+                 return ServerResponse.createBySuccess(achievementMapper.selectAchievement(num,school_year,semester));
+             }
+
     }
 
 }

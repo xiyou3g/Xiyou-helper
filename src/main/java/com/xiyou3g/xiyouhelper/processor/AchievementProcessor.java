@@ -30,6 +30,10 @@ public class AchievementProcessor{
     //成绩集合
     private List<Achievement> achievements = Collections.synchronizedList(new ArrayList());
 
+    public AchievementProcessor(OkHttpClient okHttpClient){
+        this.okHttpClient = okHttpClient;
+    }
+
     public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3) throws IOException {
         achievements.clear();
        String achievementUrl = String.format(XYE_ACH_URL, num, name);
