@@ -41,7 +41,6 @@ public class EduController {
     @Autowired
     private SessionUtil sessionUtil;
 
-
     @Autowired
     private IUserService userService;
 
@@ -120,7 +119,7 @@ public class EduController {
             // 如果数据库中有信息就不用爬取了
             if (!userService.isExist(studentNum)) {
                 LoginSuccessEvent event = new LoginSuccessEvent(studentNum, sessionId);
-                userService.saveEduPassword(studentNum, password);
+
                 loginSuccessPublisher.publishEvent(event);
             }
             SimpleUser user = new SimpleUser(studentNum, userService.getNameBySid(studentNum));
@@ -140,13 +139,5 @@ public class EduController {
 
     }
 
-    @GetMapping("/xiyou_edu_sys/password")
-    public ServerResponse<String> getPassword(String studenNum) {
-        String passowrd = userService.getXYEPassword(studenNum);
-        if (passowrd == null) {
-            return ServerResponse.createByErrorMsg("密码不存在");
-        }
-        return ServerResponse.createBySuccess(passowrd);
-    }
 
 }

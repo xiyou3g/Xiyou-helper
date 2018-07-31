@@ -5,7 +5,7 @@ CREATE TABLE `test_user` (
   `user_name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-);
+) engine = InnoDB charset = utf8;
 
 # 用户信息表
 CREATE TABLE user_message (
@@ -17,7 +17,7 @@ CREATE TABLE user_message (
   adclass VARCHAR(20) NOT NULL COMMENT '行政班级',
   level VARCHAR(4) NOT NULL COMMENT '级别',
   education VARCHAR(20) NOT NULL COMMENT '学历'
-);
+) engine = InnoDB charset = utf8;
 
 # 密码表
 CREATE TABLE user_password (
