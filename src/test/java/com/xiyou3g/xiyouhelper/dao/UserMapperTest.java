@@ -15,6 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class UserMapperTest {
 
+    @Autowired
+    private UserMapper userMapper;
+
    /* @Autowired
     private UserMapper userMapper;
 
@@ -30,5 +33,10 @@ public class UserMapperTest {
 //    public void whenTestBranch() {
 //        System.out.println("dev branch ok!!");
 //    }
+
+    @Test
+    public void testUpdatePassword() {
+//        userMapper.updatePassword("04161031", "1293141942qwer", "aaaaaa");
+    }
 
 }

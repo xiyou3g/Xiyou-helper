@@ -33,7 +33,7 @@ public class CetController {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private CetOkHttp cetOkHttp;
+    private OkHttpClient okHttpClient;
 
     @Autowired
     private SessionUtil sessionUtil;
@@ -73,7 +73,7 @@ public class CetController {
                     .build();
         }
         // 发送请求
-        Call call = cetOkHttp.getClient().newCall(request);
+        Call call = okHttpClient.newCall(request);
         try {
             // 得到响应
             Response validateCodeResponse = call.execute();
@@ -103,7 +103,7 @@ public class CetController {
     public ServerResponse<Cetscore> simulationLogin(String zkzh, String name,
                                                   String validateCode, String equipmentId) {
         String sessionId = sessionUtil.getSessionId(PrefixEnum.CET.getDesc(), equipmentId);
-        Html html = cetOkHttp.handlerSimulationLogin(zkzh, name, validateCode, sessionId);
+        Html html = new CetOkHttp(okHttpClient).handlerSimulationLogin(zkzh, name, validateCode, sessionId);
         int status;
         CetService cetService  = new CetService();
         if (sessionId != null) {

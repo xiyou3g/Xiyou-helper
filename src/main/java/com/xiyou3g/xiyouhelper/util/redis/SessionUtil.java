@@ -1,6 +1,5 @@
 package com.xiyou3g.xiyouhelper.util.redis;
 
-import ch.qos.logback.core.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

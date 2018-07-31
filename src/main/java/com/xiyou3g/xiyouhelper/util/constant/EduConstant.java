@@ -24,4 +24,9 @@ public class EduConstant {
     public static final String LOGIN_VALIDATE_CODE_ERROR = "验证码不正确";
 
     public static final String USER_MESSAGE = XYE_BASEURL + "xsgrxx.aspx?xh=%s&xm=%s&gnmkdm=N121501";
+
+    public static final String TRAINPLAN_URL = XYE_BASEURL + "pyjh.aspx?xh=%s&xm=%s&gnmkdm=N121607";
+
+    public static final String EDU_REFERER = "http://222.24.62.120/xskbcx.aspx";
+    public static final String REFERER = "Referer";
 }

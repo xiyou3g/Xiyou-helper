@@ -1,12 +1,19 @@
 package com.xiyou3g.xiyouhelper.model;
 
+
 /**
  * 成绩实体类
  */
 public class Achievement {
 
+    //学号
+    private String num;
+    //学年
+    private String school_year;
+    //学期
+    private String semester;
     //课程名称
-    private String className;
+    private String classname;
     //总成绩
     private String achievement;
     //平时分
@@ -20,28 +27,36 @@ public class Achievement {
     //期末成绩
     private String finalexam;
 
-    public String getFinalexam() {
-        return finalexam;
+    public String getNum() {
+        return num;
     }
 
-    public void setFinalexam(String finalexam) {
-        this.finalexam = finalexam;
+    public void setNum(String num) {
+        this.num = num;
     }
 
-    public String getOrdinary() {
-        return Ordinary;
+    public String getSchool_year() {
+        return school_year;
     }
 
-    public void setOrdinary(String ordinary) {
-        Ordinary = ordinary;
+    public void setSchool_year(String school_year) {
+        this.school_year = school_year;
     }
 
-    public String getClassName() {
-        return className;
+    public String getSemester() {
+        return semester;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
+
+    public String getClassname() {
+        return classname;
+    }
+
+    public void setClassname(String classname) {
+        this.classname = classname;
     }
 
     public String getAchievement() {
@@ -50,6 +65,14 @@ public class Achievement {
 
     public void setAchievement(String achievement) {
         this.achievement = achievement;
+    }
+
+    public String getOrdinary() {
+        return Ordinary;
+    }
+
+    public void setOrdinary(String ordinary) {
+        Ordinary = ordinary;
     }
 
     public String getPoint() {
@@ -76,10 +99,21 @@ public class Achievement {
         this.credit = credit;
     }
 
+    public String getFinalexam() {
+        return finalexam;
+    }
+
+    public void setFinalexam(String finalexam) {
+        this.finalexam = finalexam;
+    }
+
     @Override
     public String toString() {
         return "Achievement{" +
-                "className='" + className + '\'' +
+                ", num='" + num + '\'' +
+                ", school_year='" + school_year + '\'' +
+                ", semester='" + semester + '\'' +
+                ", classname='" + classname + '\'' +
                 ", achievement='" + achievement + '\'' +
                 ", Ordinary='" + Ordinary + '\'' +
                 ", point='" + point + '\'' +

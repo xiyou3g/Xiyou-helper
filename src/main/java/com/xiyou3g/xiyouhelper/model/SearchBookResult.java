@@ -4,22 +4,24 @@ package com.xiyou3g.xiyouhelper.model;
  * @Author: zeng
  * @Date: 2018/7/20 19:29
  */
-public class Book {
+public class SearchBookResult {
 
-    private String bookImgUrl;
+    private String link;
     private String bookName;
     private String author;
     private String publishingHouse;
-    private String shelf;
+    private String standardNumber;
+    private String publishingYear;
     private String indexNumber;
-    private Long leftNumber;
+    private Integer total;
+    private Integer left;
 
-    public String getBookImgUrl() {
-        return bookImgUrl;
+    public String getLink() {
+        return link;
     }
 
-    public void setBookImgUrl(String bookImgUrl) {
-        this.bookImgUrl = bookImgUrl;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getBookName() {
@@ -46,12 +48,20 @@ public class Book {
         this.publishingHouse = publishingHouse;
     }
 
-    public String getShelf() {
-        return shelf;
+    public String getStandardNumber() {
+        return standardNumber;
     }
 
-    public void setShelf(String shelf) {
-        this.shelf = shelf;
+    public void setStandardNumber(String standardNumber) {
+        this.standardNumber = standardNumber;
+    }
+
+    public String getPublishingYear() {
+        return publishingYear;
+    }
+
+    public void setPublishingYear(String publishingYear) {
+        this.publishingYear = publishingYear;
     }
 
     public String getIndexNumber() {
@@ -62,11 +72,19 @@ public class Book {
         this.indexNumber = indexNumber;
     }
 
-    public Long getLeftNumber() {
-        return leftNumber;
+    public Integer getTotal() {
+        return total;
     }
 
-    public void setLeftNumber(Long leftNumber) {
-        this.leftNumber = leftNumber;
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer getLeft() {
+        return left;
+    }
+
+    public void setLeft(Integer left) {
+        this.left = left;
     }
 }

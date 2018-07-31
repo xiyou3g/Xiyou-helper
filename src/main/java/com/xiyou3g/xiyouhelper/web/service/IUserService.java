@@ -8,12 +8,8 @@ import com.xiyou3g.xiyouhelper.model.User;
  * @author mengchen
  */
 public interface IUserService {
-    /**
-     * 测试登录结果
-     * @param htmlStr
-     * @return
-     */
-    int testLogin(String htmlStr);
+
+
 
     /**
      * 保存用户信息
@@ -26,4 +22,8 @@ public interface IUserService {
     String getNameBySid(String sid);
 
     boolean isExist(String sid);
+
+    User getUserBySid(String sid);
+
+
 }

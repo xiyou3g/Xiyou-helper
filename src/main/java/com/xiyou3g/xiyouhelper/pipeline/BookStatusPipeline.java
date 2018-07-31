@@ -1,6 +1,5 @@
 package com.xiyou3g.xiyouhelper.pipeline;
 
-import com.xiyou3g.xiyouhelper.model.Book;
 import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Task;
 import us.codecraft.webmagic.pipeline.Pipeline;
@@ -10,22 +9,26 @@ import us.codecraft.webmagic.pipeline.Pipeline;
  * @Date: 2018/7/23 11:25
  */
 public class BookStatusPipeline implements Pipeline {
-
-    private Book book = new Book();
-
     @Override
     public void process(ResultItems resultItems, Task task) {
 
-        this.book.setAuthor(resultItems.get("author"));
-        this.book.setIndexNumber(resultItems.get("indexNumber"));
-        this.book.setPublishingHouse(resultItems.get("publishingHouse"));
     }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
+//
+//    private Book book = new Book();
+//
+//    @Override
+//    public void process(ResultItems resultItems, Task task) {
+//
+//        this.book.setAuthor(resultItems.get("author"));
+//        this.book.setIndexNumber(resultItems.get("indexNumber"));
+//        this.book.setPublishingHouse(resultItems.get("publishingHouse"));
+//    }
+//
+//    public Book getBook() {
+//        return book;
+//    }
+//
+//    public void setBook(Book book) {
+//        this.book = book;
+//    }
 }
