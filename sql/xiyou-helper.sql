@@ -39,6 +39,7 @@ CREATE TABLE `user_achievement` (
 CREATE TABLE `train_plan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `major` varchar(40) NOT NULL,
+  `term` smallint(6) NOT NULL,
   `level` varchar(4) NOT NULL,
   `class_code` varchar(9) NOT NULL,
   `class_name` varchar(40) NOT NULL,
@@ -46,7 +47,7 @@ CREATE TABLE `train_plan` (
   `class_character` varchar(20) NOT NULL,
   `exam_type` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1817 DEFAULT CHARSET=utf8;
 
 # 培养计划状态
 CREATE TABLE `train_plan_status` (
