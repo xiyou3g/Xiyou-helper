@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 import com.xiyou3g.xiyouhelper.model.Choice;
 import com.xiyou3g.xiyouhelper.model.Essential;
 import com.xiyou3g.xiyouhelper.model.Total;
@@ -6,6 +6,7 @@ import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
@@ -17,20 +18,19 @@ import java.nio.charset.Charset;
 import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
+/**
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
+ */
 @Component
-public class TotalProcess {
+public class TotalParse {
 
-    private String achievementUrl;
-
+    @Autowired
     private OkHttpClient okHttpClient;
 
-    public TotalProcess(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
 
-    public Total total = new Total();
     public Total start(String name, String num, String sessionId, String value3) throws IOException {
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
+        String achievementUrl = String.format(XYE_ACH_URL, num, name);
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add(NAME1, VALUE1);
         formBodyBuilder.add(NAME2, VALUE2);
@@ -47,7 +47,7 @@ public class TotalProcess {
         InputStream inputStream = response.body().byteStream();
         String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
         Html html = new Html(htmlStr);
-
+        Total total = new Total();
         Essential essential = new Essential();
         Choice choice = new Choice();
         String src1 = html.xpath("//*[@id=\"Datagrid2\"]/tbody/tr[2]/td[2]").get();

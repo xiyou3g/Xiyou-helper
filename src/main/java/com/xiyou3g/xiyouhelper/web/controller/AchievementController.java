@@ -17,6 +17,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
+ */
 @RestController
 @RequestMapping("/achievement")
 public class AchievementController {
@@ -30,33 +34,29 @@ public class AchievementController {
     @PostMapping(value = "get_new_achievement")
     public ServerResponse<NewAchievement> getNewAchievement(HttpSession session) throws IOException {
 
-        Long start = System.currentTimeMillis();
         SimpleUser user = (SimpleUser) session.getAttribute("user");
         String sessionId = sessionUtil.getSessionId(PrefixEnum.XYEDU.getDesc(), user.getSid());
         ThreadLocal<String> sessionID = new ThreadLocal<>();
         sessionID.set(sessionId);
         if (sessionId.equals("")|| user == null){
-            return ServerResponse.createByErrorMsg("登陆失败，请重新登陆!");
+            return ServerResponse.createByErrorMsg("登陆过期，请重新登陆!");
         }else {
             ServerResponse<NewAchievement> achievement = achievementService.getNewAchievement(user.getName(), user.getSid(), sessionID.get());
-            System.out.println("耗时："+(System.currentTimeMillis()-start));
             return achievement;
         }
     }
 
     @PostMapping(value = "get_total")
     public ServerResponse<Total> getTotal(HttpSession session) throws IOException {
-        Long start = System.currentTimeMillis();
         SimpleUser user = (SimpleUser) session.getAttribute("user");
         String sessionId = sessionUtil.getSessionId(PrefixEnum.XYEDU.getDesc(), user.getSid());
         ThreadLocal<String> sessionID = new ThreadLocal<>();
         sessionID.set(sessionId);
         if (sessionId.equals("") || user == null){
-            return ServerResponse.createByErrorMsg("登陆失败，请重新登陆！");
+            return ServerResponse.createByErrorMsg("登陆过期，请重新登陆！");
         }
         else {
             ServerResponse<Total> totalServerResponse = achievementService.getTotal(user.getName(),user.getSid(),sessionID.get());
-            System.out.println("耗时："+(System.currentTimeMillis()-start));
             return totalServerResponse;
         }
 

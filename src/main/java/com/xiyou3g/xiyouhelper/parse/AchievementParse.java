@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import com.xiyou3g.xiyouhelper.model.Achievement;
 import okhttp3.FormBody;
@@ -20,23 +20,19 @@ import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
- * 爬取成绩
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
  */
 @Component
-public class AchievementProcessor{
+public class AchievementParse{
 
     @Autowired
     private OkHttpClient okHttpClient;
-    //成绩集合
-    private List<Achievement> achievements = Collections.synchronizedList(new ArrayList());
 
-    public AchievementProcessor(OkHttpClient okHttpClient){
-        this.okHttpClient = okHttpClient;
-    }
 
     public List<Achievement> start(String name,String num,String sessionId,String year,String semester,String value3) throws IOException {
-        achievements.clear();
-       String achievementUrl = String.format(XYE_ACH_URL, num, name);
+        List<Achievement> achievements = new ArrayList<>();
+        String achievementUrl = String.format(XYE_ACH_URL, num, name);
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         formBodyBuilder.add(NAME1, VALUE1);
         formBodyBuilder.add(NAME2, VALUE2);

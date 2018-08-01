@@ -1,8 +1,9 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
@@ -13,20 +14,17 @@ import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
- * 爬取隐藏参数3
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
  */
 @Component
-public class HiddenProcessor{
+public class HiddenParse{
 
+    @Autowired
     private OkHttpClient okHttpClient;
 
-    public HiddenProcessor(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
-
-    private String achievementUrl;
     public String start(String name,String num,String sessionId) throws IOException {
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
+        String achievementUrl = String.format(XYE_ACH_URL, num, name);
         Request request =  new Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)

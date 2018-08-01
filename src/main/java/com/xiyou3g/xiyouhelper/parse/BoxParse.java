@@ -1,7 +1,8 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
@@ -16,25 +17,19 @@ import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.XYE_ACH_
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
- * 下拉框爬取
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
  */
 @Component
-public class BoxProcess {
-    //URL
-    private String achievementUrl;
+public class BoxParse
+{
 
-    //下拉框内容
-    private List<String> boxs = Collections.synchronizedList(new ArrayList<>());
-
+    @Autowired
     private OkHttpClient okHttpClient;
 
-    public BoxProcess(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
-
     public List<String> getBox(String name, String num, String sessionId) throws IOException {
-        boxs.clear();
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
+        List<String> boxs = new ArrayList<>();
+        String achievementUrl = String.format(XYE_ACH_URL, num, name);
         okhttp3.Request request =  new okhttp3.Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)
