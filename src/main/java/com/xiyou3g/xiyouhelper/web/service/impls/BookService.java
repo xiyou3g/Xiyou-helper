@@ -1,10 +1,10 @@
 package com.xiyou3g.xiyouhelper.web.service.impls;
 
+import com.xiyou3g.xiyouhelper.common.ResponseCode;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.dao.UserMapper;
-import com.xiyou3g.xiyouhelper.model.BookStatus;
-import com.xiyou3g.xiyouhelper.model.SearchBookResult;
-import com.xiyou3g.xiyouhelper.parse.BookOkHttp;
+import com.xiyou3g.xiyouhelper.model.*;
+import com.xiyou3g.xiyouhelper.parse.BookParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.util.time.TimeUtil;
@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_DETAIL_PREFIX;
 
 /**
  * @author zeng
@@ -27,16 +29,14 @@ public class BookService implements IBookService {
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
-    private UserMapper userMapper;
-    @Autowired
     private TimeUtil timeUtil;
+    @Autowired
+    private BookParse bookParse;
 
     @Override
     public ServerResponse<String> login(String barcode, String password) {
 
-        BookOkHttp bookOkHttp = new BookOkHttp();
-
-        String sessionId = bookOkHttp.login(barcode, password);
+        String sessionId = bookParse.login(barcode, password);
 
         if (sessionId == null) {
             return ServerResponse.createByErrorMsg("登录失败");
@@ -44,36 +44,14 @@ public class BookService implements IBookService {
 
         sessionUtil.setSessionIdLong(PrefixEnum.Book.getDesc(), barcode, sessionId);
 
-
-        String persistencePassword = userMapper.checkUserExisted(barcode);
-//        用户已持久化且密码无变化
-        if (persistencePassword != null && persistencePassword.equals(password)) {
-            return ServerResponse.createBySuccessMsg("登录成功");
-        }
-
-//        登录之后持久化密码
-        userMapper.insertUserBookSystemPassword(barcode, password);
-
         return ServerResponse.createBySuccessMsg("登录成功");
     }
 
 
     @Override
-    public ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord,
-                                             String libraryId) {
+    public ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord) {
 
-
-//        SearchBookProcessor searchBookProcessor = new SearchBookProcessor();
-//
-//        searchBookProcessor.setSuchenType(suchenType);
-//        searchBookProcessor.setSuchenWord(suchenWord);
-//        searchBookProcessor.setLibraryId(libraryId);
-//
-//        List<SearchBookResult> searchBooksResponse = searchBookProcessor.searchBook();
-
-        BookOkHttp bookOkHttp = new BookOkHttp();
-
-        List<SearchBookResult> searchBooksResponse = bookOkHttp.searchBook(suchenType, suchenWord, libraryId);
+        List<SearchBookResult> searchBooksResponse = bookParse.searchBook(suchenType, suchenWord);
 
         if (searchBooksResponse == null) {
             return ServerResponse.createByErrorMsg("没有内容");
@@ -84,92 +62,118 @@ public class BookService implements IBookService {
 
 
     @Override
-    public ServerResponse<List<BookStatus>> getMyBorrowedBooks(String barcode) {
-
-//
-//
-//        if (barcode == null) {
-//            return ServerResponse.createByErrorMsg("一卡通为空，查询失败");
-//        }
-//
-//        String password = userMapper.selectBookPassword(barcode);
-//        if (password != null) {
-//            this.login(barcode, password, 1);
-//        } else {
-//            return ServerResponse.createByErrorMsg("请登录");
-//        }
-//
-//        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
-//
-//        if (sessionId == null) {
-//            return ServerResponse.createByErrorMsg("身份认证失效，请重新登录");
-//        }
-//
-//        BorrowedBookListProcessor borrowedBookInfoProcessor = new BorrowedBookListProcessor(sessionId);
-//
-//        List<BookStatus> borrowedBooksResponse = borrowedBookInfoProcessor.getMyBorrowedBooks();
-//
-//        if (borrowedBooksResponse == null) {
-//            return ServerResponse.createBySuccessMsg("无借阅信息");
-//        }
-//
-////        SearchBookProcessor searchBookProcessor = new SearchBookProcessor(sessionId);
-//        BorrowedHistoryProcessor borrowedHistoryProcessor = new BorrowedHistoryProcessor(sessionId);
-//
-//        for (BookStatus book : borrowedBooksResponse) {
-//
-//            Book bookInfo = searchBookProcessor.searchBook(book.getBookCode());
-//
-//            book.setAuthor(bookInfo.getAuthor());
-//            book.setIndexNumber(bookInfo.getIndexNumber());
-//            book.setPublishingHouse(bookInfo.getPublishingHouse());
-//
-//            String borrowDay = borrowedHistoryProcessor.getBorrowDay(book.getBookCode());
-//
-//
-//            if (borrowDay != null) {
-//                book.setBorrowDay(borrowDay);
-//            }
-//
-//            String status = timeUtil.compTime(new Date("2018/09/10").getTime(), System.currentTimeMillis());
-//            book.setStatus(status);
-//
-//        }
-//
-
-//        return ServerResponse.createBySuccess("查询成功", borrowedBooksResponse);
-
-        return null;
-    }
+    public ServerResponse<List<BorrowedBook>> getMyBorrowedBooks(String barcode) {
 
 
-    @Override
-    public ServerResponse<String> renew(String barcode, String bookCode) {
+
+        if (barcode == null) {
+            return ServerResponse.createByErrorMsg("一卡通为空，查询失败");
+        }
 
         String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
 
-//        因为这里是续借逻辑 续借的话肯定是数据持久化之后了所以判断sessionId是否在redis存在就好
-//        若不存在则使用login逻辑自动登录
         if (sessionId == null) {
-
-            String password = userMapper.getBookPassword(barcode);
-
-            this.login(barcode, password);
-
-//            重新从redis获取最新sessionId
-
-            sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
+            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "身份认证失效，请重新登录");
         }
+
+        List<BorrowedBook> borrowedBooks = bookParse.getMyBorrowed(sessionId);
+        if (borrowedBooks == null) {
+            return ServerResponse.createByErrorMsg("不存在借阅");
+        }
+
+        for (BorrowedBook borrowedBook : borrowedBooks) {
+            String time = borrowedBook.getShouldReturnDay();
+            borrowedBook.setStatus(timeUtil.calculateStatus(time));
+        }
+
+        return ServerResponse.createBySuccess("查询成功", borrowedBooks);
+    }
+
+    @Override
+    public ServerResponse<String> renew(String barcode, String bookCode) {
 
         if (barcode == null || bookCode == null) {
             return ServerResponse.createByErrorMsg("一卡通或图书条码为空，续借失败");
         }
 
-        BookOkHttp bookOkHttp = new BookOkHttp();
+        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
 
-        String renewResponse = bookOkHttp.renew(sessionId, bookCode);
+//        取sessionId 若sessionId存在则说明身份信息未失效
+        if (sessionId == null) {
+            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "身份认证失效，请重新登录");
+        }
+
+        String renewResponse = bookParse.renew(sessionId, bookCode);
+
+        if (renewResponse == null) {
+            return ServerResponse.createByErrorMsg("网络请求失败，续借失败");
+        }
 
         return ServerResponse.createBySuccessMsg(renewResponse);
+    }
+
+    @Override
+    public ServerResponse<BookDetail> getBookDetail(String url) {
+
+        if (url == null) {
+            return ServerResponse.createByErrorMsg("无法获取该图书详细信息，link为空");
+        }
+
+        StringBuilder stringBuilderUrl = new StringBuilder(BOOK_DETAIL_PREFIX);
+        String bookDetailUrl = String.valueOf(stringBuilderUrl.append(url));
+        logger.info("url " + bookDetailUrl);
+
+        BookDetail bookDetail = bookParse.getBookDetail(bookDetailUrl);
+        if (bookDetail == null) {
+            return ServerResponse.createByErrorMsg("查询失败，无信息");
+        }
+
+        return ServerResponse.createBySuccess("查询成功", bookDetail);
+    }
+
+    @Override
+    public ServerResponse<List<BorrowedBookHistory>> getMyBorrowedBooksHistory(String barcode) {
+
+        if (barcode == null) {
+            return ServerResponse.createByErrorMsg("一卡通为空，查询失败");
+        }
+
+        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
+        if (sessionId == null) {
+            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "身份认证失效，请重新登录");
+        }
+
+        List<BorrowedBookHistory> borrowedBookHistories = bookParse.getMyBorrowedBooksHistory(sessionId);
+        if (borrowedBookHistories == null) {
+            return ServerResponse.createByErrorMsg("不存在借阅历史");
+        }
+
+        return ServerResponse.createBySuccess("查询成功", borrowedBookHistories);
+
+    }
+
+    @Override
+    public ServerResponse<BookMainInfo> getMain(String barcode) {
+
+        if (barcode == null) {
+            return ServerResponse.createByErrorMsg("一卡通为空，查询失败");
+        }
+
+        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
+        if (sessionId == null) {
+            return ServerResponse.createByErrorCodeMsg(ResponseCode.NEED_LOGIN.getCode(), "身份认证失效，请重新登录");
+        }
+
+        BookMainInfo bookMainInfo = bookParse.getMain(sessionId);
+
+
+        if (bookMainInfo == null) {
+            return  ServerResponse.createByErrorMsg("无内容");
+        }
+        ServerResponse<List<BorrowedBook>> borrowedBooks = this.getMyBorrowedBooks(barcode);
+        bookMainInfo.setMainInfos(borrowedBooks.getData());
+
+        return ServerResponse.createBySuccess("查询成功", bookMainInfo);
     }
 
 
