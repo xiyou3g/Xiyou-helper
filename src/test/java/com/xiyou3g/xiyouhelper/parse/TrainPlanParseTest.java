@@ -1,24 +1,15 @@
-package com.xiyou3g.xiyouhelper.okhttp;
+package com.xiyou3g.xiyouhelper.parse;
 
 import com.xiyou3g.xiyouhelper.model.TrainPlanMessage;
 import com.xiyou3g.xiyouhelper.web.service.ITrainPlanService;
-import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.StreamUtils;
-import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selectable;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.Base64;
 import java.util.List;
 
 /**
@@ -35,10 +26,13 @@ public class TrainPlanParseTest {
     @Autowired
     private OkHttpClient okHttpClient;
 
+    @Autowired
+    private TrainPlanParse parse;
+
     @Test
     public void testGetTrainPlan() throws IOException {
         Long start = System.currentTimeMillis();
-        TrainPlanParse parse = new TrainPlanParse(okHttpClient);
+
         List<TrainPlanMessage> messageses = parse.parseTrainPlanMessages("04162106", "和书诚", "a0psffq3leu23zvynm2ihp55");
         System.out.println("耗时：" + (System.currentTimeMillis() - start));
         messageses.stream().forEach((trainPlanMessage -> {
@@ -51,7 +45,6 @@ public class TrainPlanParseTest {
     @Test
     public void testGetHidden() throws IOException {
         Long start = System.currentTimeMillis();
-        TrainPlanParse parse = new TrainPlanParse(okHttpClient);
         parse.getHidden("04162106", "和书诚", "a0psffq3leu23zvynm2ihp55");
         System.out.println("耗时：" + (System.currentTimeMillis() - start));
     }

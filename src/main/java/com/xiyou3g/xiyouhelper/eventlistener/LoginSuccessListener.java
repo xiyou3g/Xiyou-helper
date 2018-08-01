@@ -3,7 +3,8 @@ package com.xiyou3g.xiyouhelper.eventlistener;
 import com.xiyou3g.xiyouhelper.model.Achievement;
 import com.xiyou3g.xiyouhelper.model.TrainPlanMessage;
 import com.xiyou3g.xiyouhelper.model.User;
-import com.xiyou3g.xiyouhelper.processor.UserMessageParse;
+import com.xiyou3g.xiyouhelper.parse.TrainPlanParse;
+import com.xiyou3g.xiyouhelper.parse.UserMessageParse;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;
 import com.xiyou3g.xiyouhelper.web.service.ITrainPlanService;
 import com.xiyou3g.xiyouhelper.web.service.impls.LoginSuccessService;
@@ -33,6 +34,9 @@ public class LoginSuccessListener implements ApplicationListener<LoginSuccessEve
     private IAchievementService achievementService;
 
     @Autowired
+    private TrainPlanParse trainPlanParse;
+
+    @Autowired
     private ITrainPlanService trainPlanService;
 
     @Autowired
@@ -41,20 +45,22 @@ public class LoginSuccessListener implements ApplicationListener<LoginSuccessEve
     @Autowired
     private OkHttpClient okHttpClient;
 
+    @Autowired
+    private UserMessageParse userMessageParse;
+
     @Override
     public void onApplicationEvent(LoginSuccessEvent loginSuccessEvent) {
         logger.info("登录成功了！");
         Thread thread = new Thread(() -> {
             try {
-                loginSuccessEvent.setOkHttpClient(okHttpClient);
-                User user = loginSuccessEvent.handlerUserMessage();
+                User user = loginSuccessEvent.handlerUserMessage(userMessageParse);
                 loginSuccessEvent.setName(user.getName());
                 List<Achievement> achievements = loginSuccessEvent.handlerAchievement(achievementService);
                 loginSuccessEvent.setMajor(user.getMajor());
                 loginSuccessEvent.setLevel(user.getLevel());
                 List<TrainPlanMessage> messages = null;
                 if (trainPlanService.isExist(user.getMajor(), user.getLevel()) == false) {
-                    messages = loginSuccessEvent.hanlderParseTrainPlan(trainPlanService);
+                    messages = loginSuccessEvent.hanlderParseTrainPlan(trainPlanParse);
                 }
                 loginSuccessService.saveSomeMessage(user, achievements, messages);
             } catch (IOException e) {

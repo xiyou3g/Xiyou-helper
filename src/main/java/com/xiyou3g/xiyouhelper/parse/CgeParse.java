@@ -1,9 +1,10 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.aspectj.lang.annotation.Around;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.Page;
@@ -24,14 +25,12 @@ import java.util.Map;
  * @author mengchen
  * @time 18-7-26 上午8:27
  */
-public class CGEProcessor {
+@Component
+public class CgeParse {
 
-
+    @Autowired
     private OkHttpClient client;
 
-    public CGEProcessor(OkHttpClient client) {
-        this.client = client;
-    }
 
     public Map<String, String> parseCGETimeMap() throws IOException {
         Map<String, String> map = new HashMap<>();

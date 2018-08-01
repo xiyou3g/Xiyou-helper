@@ -1,20 +1,15 @@
-package com.xiyou3g.xiyouhelper.okhttp;
+package com.xiyou3g.xiyouhelper.parse;
 
-import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.SearchBookResult;
 import com.xiyou3g.xiyouhelper.processor.ReNewProcessor;
 import okhttp3.*;
-import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.model.HttpRequestBody;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.utils.HttpConstant;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.*;

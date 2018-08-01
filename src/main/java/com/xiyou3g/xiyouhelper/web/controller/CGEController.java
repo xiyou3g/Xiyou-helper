@@ -2,7 +2,7 @@ package com.xiyou3g.xiyouhelper.web.controller;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.CGEMessage;
-import com.xiyou3g.xiyouhelper.processor.CGEProcessor;
+import com.xiyou3g.xiyouhelper.parse.CgeParse;
 import com.xiyou3g.xiyouhelper.util.okhttp.MyOkHttp;
 import com.xiyou3g.xiyouhelper.web.service.ICGEService;
 import okhttp3.*;
@@ -31,7 +31,7 @@ public class CGEController {
     ICGEService service;
 
     @Autowired
-    private OkHttpClient okHttpClient;
+    private CgeParse cgeParse;
 
     @GetMapping("/cge/validate_code")
     public void sendValidateCode(HttpSession session, HttpServletResponse response) throws IOException {
@@ -82,8 +82,7 @@ public class CGEController {
 
     @GetMapping("/cge/getTimes")
     public ServerResponse<Map<String, String>> getTime() throws IOException {
-        CGEProcessor cgeProcessor = new CGEProcessor(okHttpClient);
-        Map<String, String> map = cgeProcessor.parseCGETimeMap();
+        Map<String, String> map = cgeParse.parseCGETimeMap();
         return ServerResponse.createBySuccess(map);
     }
 
