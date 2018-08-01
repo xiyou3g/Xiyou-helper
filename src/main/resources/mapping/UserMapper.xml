@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiyou3g.xiyouhelper.dao.UserMapper">
-  <resultMap id="BaseResultMap" type="User">
+  <resultMap id="BaseResultMap" type="com.xiyou3g.xiyouhelper.model.User">
     <result column="id" jdbcType="INTEGER" property="id" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -27,11 +27,7 @@
   <insert id="insertUserBookSystemPassword" parameterType="String">
     INSERT INTO user_password (sid, book_system) VALUES (#{username}, #{password})
   </insert>
-  
-  <insert id="insertEduBookSystemPassword" parameterType="String">
-    INSERT INTO user_password (sid, edu_system) VALUE (#{username}, #{password})
-  </insert>
-  
+
   <select id="checkUserExisted" resultType="String">
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
@@ -40,25 +36,7 @@
     SELECT password FROM user_password WHERE sid = #{barcode}
   </select>
 
-
-    <insert id="insertEduPassword">
-        INSERT INTO user_password(sid, edu_system) VALUE (#{studentNum}, #{password})
-    </insert>
-
-    <update id="updatePassword">
-        UPDATE user_password
-        <set>
-            <if test="eduPassword != null and eduPassword != ''">
-                edu_system= #{eduPassword},
-            </if>
-            <if test="bookPassword != null and eduPassword != ''">
-                book_system = #{bookPassword},
-            </if>
-        </set>
-        WHERE sid = #{studentNum}
-    </update>
-
-    <select id="isExistUserPassword" resultType="Integer" >
-        SELECT COUNT(*) FROM user_password WHERE sid = #{studentNum}
-    </select>
+  <select id="isExistUserPassword" resultType="Integer" >
+    SELECT COUNT(*) FROM user_password WHERE sid = #{studentNum}
+   </select>
 </mapper>

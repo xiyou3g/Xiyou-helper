@@ -46,18 +46,6 @@ public class UserService implements IUserService {
         return userMapper.getUserBySid(sid);
     }
 
-    @Override
-    public String getXYEPassword(String studentNum) {
-        return userMapper.getEduPassword(studentNum);
-    }
-
-    @Override
-    public boolean saveEduPassword(String studetNum, String password) {
-        if (userMapper.isExistUserPassword(studetNum) == 1) {
-            return userMapper.updatePassword(studetNum, password, null) == 1;
-        }
-        return userMapper.insertEduPassword(studetNum, password) == 1;
-    }
 
 
 }

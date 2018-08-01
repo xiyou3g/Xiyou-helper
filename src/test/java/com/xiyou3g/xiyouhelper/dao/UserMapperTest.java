@@ -36,13 +36,7 @@ public class UserMapperTest {
 
     @Test
     public void testUpdatePassword() {
-
-        userMapper.updatePassword("04161031", "1293141942qwer", "aaaaaa");
+//        userMapper.updatePassword("04161031", "1293141942qwer", "aaaaaa");
     }
 
-    @Test
-    public void testUserIsExist() {
-        int status = userMapper.isExist("04161031");
-        System.out.println(status);
-    }
 }
