@@ -23,5 +23,4 @@
     SELECT sid, name, gender, college, major, adclass, level, education FROM user_message
     WHERE sid = #{sid}
   </select>
-
 </mapper>

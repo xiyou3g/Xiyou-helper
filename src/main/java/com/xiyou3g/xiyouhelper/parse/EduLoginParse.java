@@ -2,6 +2,8 @@ package com.xiyou3g.xiyouhelper.parse;
 
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.selector.Html;
 
 import java.io.IOException;
@@ -14,15 +16,11 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.*;
  * 18-7-20 下午7:37
  * @author mengchen
  */
-
+@Component
 public class EduLoginParse {
 
+    @Autowired
     private OkHttpClient okHttpClient;
-
-    public EduLoginParse(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
-
 
     public int handlerSimulationLogin(String studentNum, String password, String validateCode,String sessionId) {
         int loginStatus;

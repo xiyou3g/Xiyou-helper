@@ -29,8 +29,8 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.*;
 
 
 /**
- * mengchen
  * 18-7-20 下午7:40
+ * @author mengchen
  */
 @RestController
 public class EduController {
@@ -48,7 +48,7 @@ public class EduController {
     LoginSuccessPublisher loginSuccessPublisher;
 
     @Autowired
-    private OkHttpClient okHttpClient;
+    private EduLoginParse eduLoginParse;
 
     /**
      * 转发验证码
@@ -110,8 +110,7 @@ public class EduController {
         System.out.println(sessionId);
         int status;
         if (sessionId != null) {
-            EduLoginParse parse = new EduLoginParse(okHttpClient);
-            status = parse.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
+            status = eduLoginParse.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
         } else {
             status = -1;
         }

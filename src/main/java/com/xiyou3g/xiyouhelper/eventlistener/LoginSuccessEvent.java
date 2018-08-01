@@ -4,10 +4,11 @@ import com.xiyou3g.xiyouhelper.model.Achievement;
 import com.xiyou3g.xiyouhelper.model.TrainPlanMessage;
 import com.xiyou3g.xiyouhelper.model.User;
 import com.xiyou3g.xiyouhelper.parse.TrainPlanParse;
-import com.xiyou3g.xiyouhelper.processor.UserMessageParse;
+import com.xiyou3g.xiyouhelper.parse.UserMessageParse;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;
 import com.xiyou3g.xiyouhelper.web.service.ITrainPlanService;
 import okhttp3.OkHttpClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 
 import java.io.IOException;
@@ -26,8 +27,6 @@ public class LoginSuccessEvent extends ApplicationEvent {
     private String major;
     private String level;
 
-    private OkHttpClient okHttpClient;
-
 
     public LoginSuccessEvent(String studentNum, String sessionId) {
         super("登录成功");
@@ -36,16 +35,15 @@ public class LoginSuccessEvent extends ApplicationEvent {
     }
 
 
-    public User handlerUserMessage() throws IOException {
-        return new UserMessageParse(okHttpClient).parseUserMessage(studentNum, sessionId);
+    public User handlerUserMessage(UserMessageParse userMessageParse) throws IOException {
+        return userMessageParse.parseUserMessage(studentNum, sessionId);
     }
 
     public List<Achievement> handlerAchievement(IAchievementService service) throws IOException {
          return service.getAchievement(name, studentNum, sessionId);
     }
 
-    public List<TrainPlanMessage> hanlderParseTrainPlan(ITrainPlanService service) throws IOException {
-        TrainPlanParse parse = new TrainPlanParse(okHttpClient);
+    public List<TrainPlanMessage> hanlderParseTrainPlan(TrainPlanParse parse) throws IOException {
         List<TrainPlanMessage> messages = parse.parseTrainPlanMessages(studentNum, name, sessionId);
         messages.stream().forEach((message) -> {
             message.setMajor(major);
@@ -94,7 +92,4 @@ public class LoginSuccessEvent extends ApplicationEvent {
         this.level = level;
     }
 
-    public void setOkHttpClient(OkHttpClient okHttpClient) {
-        this.okHttpClient = okHttpClient;
-    }
 }

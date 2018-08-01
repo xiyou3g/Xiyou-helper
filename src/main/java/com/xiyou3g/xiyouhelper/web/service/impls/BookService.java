@@ -2,6 +2,7 @@ package com.xiyou3g.xiyouhelper.web.service.impls;
 
 import com.xiyou3g.xiyouhelper.common.ResponseCode;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
+import com.xiyou3g.xiyouhelper.dao.UserMapper;
 import com.xiyou3g.xiyouhelper.model.*;
 import com.xiyou3g.xiyouhelper.parse.BookParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
