@@ -44,7 +44,7 @@ public class CetOkHttp {
                 stringBuffer.append(new String(bytes, "UTF-8"));
             }
             Html html = new Html(stringBuffer.toString());
-            System.out.println(html);
+            //System.out.println(html);
             return html;
         } catch (IOException e) {
             e.printStackTrace();

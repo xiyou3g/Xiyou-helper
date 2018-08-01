@@ -11,4 +11,6 @@ public class CetConstant {
     public static final String LOGIN_VALIDATE_CODE = "yzm";
     public static final String LOGIN_ZKZH_NAME_ERROR = "无法找到对应的分数，请确认您输入的准考证号及姓名无误。";
     public static final String LOGIN_VALIDATE_CODE_ERROR = "验证码不正确";
+    public static final String LOGIN_ZKZHNUMBER_ERROR = "请输入15位笔试或口试准考证号";
+    public static final String LOGIN_NAMENUMBER_ERROR = "姓名至少1个字符";
 }

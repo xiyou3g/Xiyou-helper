@@ -19,7 +19,8 @@ public class CetService implements ICetService{
      * - 0 登录成功
      * - 1 准考证号或姓名错误
      * - 2 验证码错误
-     *
+     * - 3 请输入15位笔试或口试准考证号
+     * - 4 姓名至少1个字符
      * -1 未知情况
      * @param htmlStr
      * @return
@@ -32,15 +33,22 @@ public class CetService implements ICetService{
         //验证码有误
         String fault2 = html.xpath("//*[@id=\"form1\"]/div/text()").get();
 
-        System.out.println(fault1 + fault2);
+        System.out.println(fault1 + "1");
+        System.out.println(fault2 + "2");
         if (fault1.indexOf("最终结果") != -1 && fault2 == null){
             return 0;
         }
-        if (StringUtils.equals(fault1, LOGIN_ZKZH_NAME_ERROR)){
+        else if (fault1.indexOf("无法找到") != -1){
             return 1;
         }
-        if (StringUtils.equals(fault2,LOGIN_VALIDATE_CODE_ERROR)){
+        else if (fault2.indexOf("验证码") != -1){
             return 2;
+        }
+        else if(fault2.indexOf("15") != -1){
+            return 3;
+        }
+        else if (fault2.indexOf("字符") != -1) {
+            return 4;
         }
         return -1;
     }

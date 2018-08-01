@@ -18,7 +18,6 @@ import us.codecraft.webmagic.selector.Html;
 
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -108,6 +107,7 @@ public class CetController {
         CetService cetService  = new CetService();
         if (sessionId != null) {
             status = cetService.testLogin(html);
+            System.out.println(status);
         } else {
             status = -1;
         }
@@ -118,8 +118,13 @@ public class CetController {
             return ServerResponse.createByErrorMsg(LOGIN_ZKZH_NAME_ERROR);
         } else if (status == 2) {
             return ServerResponse.createByErrorMsg(LOGIN_VALIDATE_CODE_ERROR);
-        } else {
-            return ServerResponse.createByErrorMsg("未知情况");
+        } else if (status == 3) {
+            return ServerResponse.createByErrorMsg(LOGIN_ZKZHNUMBER_ERROR);
+        } else if (status == 4) {
+            return ServerResponse.createByErrorMsg(LOGIN_NAMENUMBER_ERROR);
+        }
+        else {
+            return ServerResponse.createByErrorMsg("未知错误");
         }
     }
 }
