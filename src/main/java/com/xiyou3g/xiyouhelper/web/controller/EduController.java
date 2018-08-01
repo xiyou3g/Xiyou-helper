@@ -4,7 +4,7 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessEvent;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessPublisher;
 import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
-import com.xiyou3g.xiyouhelper.okhttp.EduLoginParse;
+import com.xiyou3g.xiyouhelper.parse.EduLoginParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;
@@ -29,8 +29,8 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.*;
 
 
 /**
- * mengchen
  * 18-7-20 下午7:40
+ * @author mengchen
  */
 @RestController
 public class EduController {
@@ -48,7 +48,7 @@ public class EduController {
     LoginSuccessPublisher loginSuccessPublisher;
 
     @Autowired
-    private OkHttpClient okHttpClient;
+    private EduLoginParse eduLoginParse;
 
     /**
      * 转发验证码
@@ -110,8 +110,7 @@ public class EduController {
         System.out.println(sessionId);
         int status;
         if (sessionId != null) {
-            EduLoginParse parse = new EduLoginParse(okHttpClient);
-            status = parse.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
+            status = eduLoginParse.handlerSimulationLogin(studentNum, password, validateCode, sessionId);
         } else {
             status = -1;
         }

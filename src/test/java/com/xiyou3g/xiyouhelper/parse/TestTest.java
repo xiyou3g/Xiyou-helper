@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.okhttp;
+package com.xiyou3g.xiyouhelper.parse;
 
 import com.xiyou3g.xiyouhelper.model.Achievement;
 import okhttp3.FormBody;

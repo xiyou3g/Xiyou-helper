@@ -4,8 +4,7 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.dao.UserMapper;
 import com.xiyou3g.xiyouhelper.model.BookStatus;
 import com.xiyou3g.xiyouhelper.model.SearchBookResult;
-import com.xiyou3g.xiyouhelper.okhttp.BookOkHttp;
-import com.xiyou3g.xiyouhelper.processor.SearchBookProcessor;
+import com.xiyou3g.xiyouhelper.parse.BookOkHttp;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.util.time.TimeUtil;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**

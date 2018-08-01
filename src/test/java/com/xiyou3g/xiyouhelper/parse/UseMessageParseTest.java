@@ -1,10 +1,4 @@
-package com.xiyou3g.xiyouhelper.okhttp;
-
-import com.xiyou3g.xiyouhelper.model.User;
-import com.xiyou3g.xiyouhelper.processor.UserMessageParse;
-import org.junit.Test;
-
-import java.io.IOException;
+package com.xiyou3g.xiyouhelper.parse;
 
 /**
  * @author mengchen

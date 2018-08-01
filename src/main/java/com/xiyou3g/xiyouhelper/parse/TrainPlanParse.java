@@ -1,10 +1,11 @@
-package com.xiyou3g.xiyouhelper.okhttp;
+package com.xiyou3g.xiyouhelper.parse;
 
 import com.xiyou3g.xiyouhelper.model.TrainPlanMessage;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.bind.annotation.ResponseBody;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -24,12 +25,8 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.TRAINPLAN_URL;
 @Component
 public class TrainPlanParse {
 
-    private OkHttpClient client;
-
     @Autowired
-    public TrainPlanParse(OkHttpClient client) {
-        this.client = client;
-    }
+    private OkHttpClient client;
 
     public String getHidden(String studentNum, String name, String sessionId) throws IOException {
         String url = String.format(TRAINPLAN_URL, studentNum, name);
