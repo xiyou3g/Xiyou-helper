@@ -2,8 +2,7 @@ package com.xiyou3g.xiyouhelper.web.service;
 
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
 
-import com.xiyou3g.xiyouhelper.model.BookStatus;
-import com.xiyou3g.xiyouhelper.model.SearchBookResult;
+import com.xiyou3g.xiyouhelper.model.*;
 
 import java.util.List;
 
@@ -25,17 +24,16 @@ public interface IBookService {
      * 图书检索
      * @param suchenType 检索类型
      * @param suchenWord 关键字
-     * @param libraryId 分馆名称
      * @return
      */
-    ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord, String libraryId);
+    ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord);
 
     /**
      * 查询自己的借阅书籍
      * @param barcode 一卡通
      * @return
      */
-    ServerResponse<List<BookStatus>> getMyBorrowedBooks(String barcode);
+    ServerResponse<List<BorrowedBook>> getMyBorrowedBooks(String barcode);
 
 
     /**
@@ -45,4 +43,26 @@ public interface IBookService {
      * @return
      */
     ServerResponse<String> renew(String barcode, String bookCode);
+
+    /**
+     * 获取书籍详细信息
+     * @param url 图片url
+     * @return
+     */
+    ServerResponse<BookDetail> getBookDetail(String url);
+
+    /**
+     * 获取个人借阅历史
+     * @param barcode 一卡通
+     * @return
+     */
+    ServerResponse<List<BorrowedBookHistory>> getMyBorrowedBooksHistory(String barcode);
+
+    /**
+     * 获取个人主页信息
+     * @param barcode
+     * @return
+     */
+
+    ServerResponse<BookMainInfo> getMain(String barcode);
 }

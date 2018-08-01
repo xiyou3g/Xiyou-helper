@@ -25,8 +25,5 @@ public interface IUserService {
 
     User getUserBySid(String sid);
 
-    String getXYEPassword(String studentNum);
-
-    boolean saveEduPassword(String studetNum, String password);
 
 }

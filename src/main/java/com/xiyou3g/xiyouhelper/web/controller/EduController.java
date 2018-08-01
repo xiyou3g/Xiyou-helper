@@ -4,7 +4,7 @@ import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessEvent;
 import com.xiyou3g.xiyouhelper.eventlistener.LoginSuccessPublisher;
 import com.xiyou3g.xiyouhelper.model.dto.SimpleUser;
-import com.xiyou3g.xiyouhelper.okhttp.EduLoginParse;
+import com.xiyou3g.xiyouhelper.parse.EduLoginParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
 import com.xiyou3g.xiyouhelper.util.redis.SessionUtil;
 import com.xiyou3g.xiyouhelper.web.service.IUserService;
@@ -40,7 +40,6 @@ public class EduController {
 
     @Autowired
     private SessionUtil sessionUtil;
-
 
     @Autowired
     private IUserService userService;
@@ -120,7 +119,7 @@ public class EduController {
             // 如果数据库中有信息就不用爬取了
             if (!userService.isExist(studentNum)) {
                 LoginSuccessEvent event = new LoginSuccessEvent(studentNum, sessionId);
-                userService.saveEduPassword(studentNum, password);
+
                 loginSuccessPublisher.publishEvent(event);
             }
             SimpleUser user = new SimpleUser(studentNum, userService.getNameBySid(studentNum));
@@ -140,13 +139,5 @@ public class EduController {
 
     }
 
-    @GetMapping("/xiyou_edu_sys/password")
-    public ServerResponse<String> getPassword(String studenNum) {
-        String passowrd = userService.getXYEPassword(studenNum);
-        if (passowrd == null) {
-            return ServerResponse.createByErrorMsg("密码不存在");
-        }
-        return ServerResponse.createBySuccess(passowrd);
-    }
 
 }
