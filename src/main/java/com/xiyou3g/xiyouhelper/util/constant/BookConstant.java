@@ -12,11 +12,15 @@ public class BookConstant {
 
     public static final String BOOK_BORROWED_URL = "http://222.24.3.7:8080/opac_two/reader/jieshuxinxi.jsp";
 
+    public static final String BOOK_BORROWED_HISTORY_URL = "http://222.24.3.7:8080/opac_two/reader/jieshulishi.jsp";
+
     public static final String BOOK_LOGIN_USERNAME = "barcode";
 
     public static final String BOOK_LOGIN_PASSWORD = "password";
 
     public static final String SEARCH_BOOK_URL = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
+
+    public static final String BOOK_DETAIL_PREFIX = "http://222.24.3.7:8080/opac_two/search2/";
 
     public static final String BOOK_RENEW_ACTION = "action";
 

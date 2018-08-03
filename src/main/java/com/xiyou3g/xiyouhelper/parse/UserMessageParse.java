@@ -1,4 +1,4 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import com.xiyou3g.xiyouhelper.model.User;
 import okhttp3.OkHttpClient;
@@ -7,6 +7,8 @@ import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
 
@@ -22,15 +24,14 @@ import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.REFERER;
  *
  * @author mengchen
  */
+@Component
 public class UserMessageParse {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
     private OkHttpClient client;
 
-    public UserMessageParse(OkHttpClient client) {
-        this.client = client;
-    }
 
     public User parseUserMessage(String studentNum, String sessionId) throws IOException {
         User user = new User();
