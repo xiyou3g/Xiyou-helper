@@ -1,5 +1,8 @@
 package com.xiyou3g.xiyouhelper.model;
 
+/**
+ * 必修课学分统计实体类
+ */
 public class Essential {
 
     private String total;
@@ -30,12 +33,4 @@ public class Essential {
         this.nopass = nopass;
     }
 
-    @Override
-    public String toString() {
-        return "Essential{" +
-                "total='" + total + '\'' +
-                ", pass='" + pass + '\'' +
-                ", nopass='" + nopass + '\'' +
-                '}';
-    }
 }

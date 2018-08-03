@@ -1,5 +1,8 @@
 package com.xiyou3g.xiyouhelper.model;
 
+/**
+ * 选修学分统计实体类
+ */
 public class Choice {
 
     private String total;
@@ -31,12 +34,4 @@ public class Choice {
         this.nopass = nopass;
     }
 
-    @Override
-    public String toString() {
-        return "Choice{" +
-                "total='" + total + '\'' +
-                ", pass='" + pass + '\'' +
-                ", nopass='" + nopass + '\'' +
-                '}';
-    }
 }

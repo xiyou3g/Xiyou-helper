@@ -1,5 +1,8 @@
 package com.xiyou3g.xiyouhelper.model;
 
+/**
+ * 成绩统计实体类
+ */
 public class Total {
 
     private String averageGPA;
@@ -39,13 +42,4 @@ public class Total {
         this.essential = essential;
     }
 
-    @Override
-    public String toString() {
-        return "Total{" +
-                "averageGPA='" + averageGPA + '\'' +
-                ", allGPA='" + allGPA + '\'' +
-                ", choice=" + choice +
-                ", essential=" + essential +
-                '}';
-    }
 }

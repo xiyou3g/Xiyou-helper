@@ -1,8 +1,9 @@
-package com.xiyou3g.xiyouhelper.processor;
+package com.xiyou3g.xiyouhelper.parse;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import us.codecraft.webmagic.selector.Html;
@@ -13,15 +14,17 @@ import static com.xiyou3g.xiyouhelper.util.constant.AchievementConstant.*;
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.XYE_SESSION_KEY;
 
 /**
- * 爬取隐藏参数3
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
  */
 @Component
-public class HiddenProcessor{
+public class HiddenParse{
 
-    private String achievementUrl;
+    @Autowired
+    private OkHttpClient okHttpClient;
+
     public String start(String name,String num,String sessionId) throws IOException {
-        achievementUrl = String.format(XYE_ACH_URL, num, name);
-        OkHttpClient okHttpClient = new OkHttpClient();
+        String achievementUrl = String.format(XYE_ACH_URL, num, name);
         Request request =  new Request.Builder().url(achievementUrl)
                 .addHeader("Cookie",XYE_SESSION_KEY+sessionId)
                 .addHeader("Referer",ACH_REFER)
@@ -31,7 +34,6 @@ public class HiddenProcessor{
         String htmlStr = StreamUtils.copyToString(inputStream,Charset.forName("GBK"));
         Html html = new Html(htmlStr);
         String result = html.xpath("//*[@id=\"Form1\"]/input[3]/@value").get();
-//        sunxiaozhe is a zz
         return result;
     }
 }

@@ -5,10 +5,10 @@ import com.xiyou3g.xiyouhelper.dao.AchievementMapper;
 import com.xiyou3g.xiyouhelper.model.Achievement;
 import com.xiyou3g.xiyouhelper.model.NewAchievement;
 import com.xiyou3g.xiyouhelper.model.Total;
-import com.xiyou3g.xiyouhelper.processor.AchievementProcessor;
-import com.xiyou3g.xiyouhelper.processor.BoxProcess;
-import com.xiyou3g.xiyouhelper.processor.HiddenProcessor;
-import com.xiyou3g.xiyouhelper.processor.TotalProcess;
+import com.xiyou3g.xiyouhelper.parse.AchievementParse;
+import com.xiyou3g.xiyouhelper.parse.BoxParse;
+import com.xiyou3g.xiyouhelper.parse.HiddenParse;
+import com.xiyou3g.xiyouhelper.parse.TotalParse;
 import com.xiyou3g.xiyouhelper.web.service.IAchievementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,20 +21,24 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
+ */
 @Service
 public class AchievementService implements IAchievementService {
 
     @Autowired
-    private AchievementProcessor achievementProcessor;
+    private HiddenParse hiddenParse;
 
     @Autowired
-    private BoxProcess process;
+    private BoxParse boxParse;
 
     @Autowired
-    private HiddenProcessor hiddenProcessor;
+    private TotalParse totalParse;
 
     @Autowired
-    private TotalProcess totalProcess;
+    private AchievementParse achievementParse;
 
     @Resource
     private AchievementMapper achievementMapper;
@@ -43,14 +47,13 @@ public class AchievementService implements IAchievementService {
     @Override
     public List<Achievement> getAchievement(String name, String num, String sessionId) throws IOException {
 
-        String value3 = hiddenProcessor.start(name,num,sessionId);
-        System.out.println(value3);
+        String value3 = hiddenParse.start(name,num,sessionId);
         //爬取所有学年
-        List<String> lists = process.getBox(name,num,sessionId);
+        List<String> lists = boxParse.getBox(name,num,sessionId);
         List<Achievement> achievementList = Collections.synchronizedList(new ArrayList<>());
         for (String list : lists){
             for (int i = 1;i<=2;i++){
-                List<Achievement> achievements = achievementProcessor.start(name,num,sessionId,list, String.valueOf(i),value3);
+                List<Achievement> achievements = achievementParse.start(name,num,sessionId,list, String.valueOf(i),value3);
                 for (Achievement achievement : achievements){
                     achievementList.add(achievement);
                 }
@@ -61,9 +64,9 @@ public class AchievementService implements IAchievementService {
 
     @Override
     public ServerResponse<NewAchievement> getNewAchievement(String name, String num, String sessionId) throws IOException {
-        String value3 = hiddenProcessor.start(name,num,sessionId);
+        String value3 = hiddenParse.start(name,num,sessionId);
         //爬取所有学年
-        List<String> lists = process.getBox(name,num,sessionId);
+        List<String> lists = boxParse.getBox(name,num,sessionId);
         //成绩集合
         List<Achievement> achievements;
         //最新成绩和列表对象
@@ -72,10 +75,10 @@ public class AchievementService implements IAchievementService {
 
         //获取当前月份
         Calendar calendar = Calendar.getInstance();
-        int month = 8;
-        achievements = achievementProcessor.start(name,num,sessionId,lists.get(0),"2",value3);
+        int month=calendar.get(Calendar.MONTH)+1;
+        achievements = achievementParse.start(name,num,sessionId,lists.get(0),"2",value3);
         if (achievements.size() == 0){
-            achievements = achievementProcessor.start(name,num,sessionId,lists.get(0),"1",value3);
+            achievements = achievementParse.start(name,num,sessionId,lists.get(0),"1",value3);
             if (month >= 2){
                 try {
                     for (Achievement achievement : achievements){
@@ -104,13 +107,20 @@ public class AchievementService implements IAchievementService {
 
     @Override
     public ServerResponse<Total> getTotal(String name, String num, String sessionId) throws IOException {
-        String value = hiddenProcessor.start(name,num,sessionId);
-        return ServerResponse.createBySuccess(totalProcess.start(name,num,sessionId,value));
+        String value = hiddenParse.start(name,num,sessionId);
+        return ServerResponse.createBySuccess(totalParse.start(name,num,sessionId,value));
     }
 
     @Override
     public ServerResponse<List<Achievement>> selectAchievement(String num, String school_year, String semester) {
-        return ServerResponse.createBySuccess(achievementMapper.selectAchievement(num,school_year,semester));
+
+             List<Achievement> achievements = achievementMapper.selectAchievement(num,school_year,semester);
+             if (achievements.size() == 0){
+                 return ServerResponse.createByErrorMsg("查询失败！");
+             }else {
+                 return ServerResponse.createBySuccess(achievementMapper.selectAchievement(num,school_year,semester));
+             }
+
     }
 
 }

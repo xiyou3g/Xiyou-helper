@@ -2,6 +2,9 @@ package com.xiyou3g.xiyouhelper.model;
 
 import java.util.List;
 
+/**
+ * 最新成绩及其学年列表实体类
+ */
 public class NewAchievement {
 
     //学年集合
@@ -25,11 +28,4 @@ public class NewAchievement {
         this.year = year;
     }
 
-    @Override
-    public String toString() {
-        return "NewAchievement{" +
-                "year=" + year +
-                ", achievements=" + achievements +
-                '}';
-    }
 }

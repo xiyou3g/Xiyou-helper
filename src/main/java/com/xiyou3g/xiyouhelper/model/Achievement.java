@@ -107,19 +107,4 @@ public class Achievement {
         this.finalexam = finalexam;
     }
 
-    @Override
-    public String toString() {
-        return "Achievement{" +
-                ", num='" + num + '\'' +
-                ", school_year='" + school_year + '\'' +
-                ", semester='" + semester + '\'' +
-                ", classname='" + classname + '\'' +
-                ", achievement='" + achievement + '\'' +
-                ", Ordinary='" + Ordinary + '\'' +
-                ", point='" + point + '\'' +
-                ", nature='" + nature + '\'' +
-                ", credit='" + credit + '\'' +
-                ", finalexam='" + finalexam + '\'' +
-                '}';
-    }
 }
