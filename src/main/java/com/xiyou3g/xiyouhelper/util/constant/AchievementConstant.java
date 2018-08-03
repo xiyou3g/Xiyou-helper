@@ -3,7 +3,8 @@ package com.xiyou3g.xiyouhelper.util.constant;
 import org.springframework.stereotype.Component;
 
 /**
- * 参数
+ * @author sunxiaozhe
+ * @time 2018/8/1 9:43
  */
 @Component
 public class AchievementConstant{
