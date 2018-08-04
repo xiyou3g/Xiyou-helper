@@ -26,7 +26,7 @@ public interface IBookService {
      * @param suchenWord 关键字
      * @return
      */
-    ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord);
+    ServerResponse<SearchBookResult> search(String suchenType, String suchenWord, int curPage);
 
     /**
      * 查询自己的借阅书籍
