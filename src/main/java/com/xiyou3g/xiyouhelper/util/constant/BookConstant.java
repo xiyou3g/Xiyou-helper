@@ -29,4 +29,6 @@ public class BookConstant {
     public static final String DEPARTMENT_ID = "department_id";
 
     public static final String LIBRARY_ID = "library_id";
+
+    public static final String BOOK_DETAIL_URL_REGEX = "s_detail\\.jsp\\?sid=\\w{10}";
 }
