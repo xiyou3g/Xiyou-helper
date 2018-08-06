@@ -63,7 +63,7 @@ public class BookParse {
     }
 
 
-    public List<SearchBookResult> searchBook(String suchenType, String suchenWord) {
+    public SearchBookResult searchBook(String suchenType, String suchenWord, int curPage) {
 
         if (suchenWord == null) {
             return null;
@@ -77,6 +77,7 @@ public class BookParse {
                 .add("snumber_type", "Y")
                 .add("suchen_match", "mh")
                 .add("recordtype", "all")
+                .add("curpage", String.valueOf(curPage))
                 .build();
 
 
@@ -109,7 +110,11 @@ public class BookParse {
                     return null;
                 }
 
-                List<SearchBookResult> searchBookResultList = new ArrayList<>();
+                SearchBookResult searchBookResult = new SearchBookResult();
+
+                searchBookResult.setCurPage(Integer.valueOf(html.xpath("/html/body/center/form/table[2]/tbody/tr[2]/td[1]/span[1]/strong/text()").toString()));
+
+                List<CurPageBookResult> curPageBookResults = new ArrayList<>();
 
                 String tdFlag = null;
 //        一页默认20条记录 爬取10条测试
@@ -121,25 +126,27 @@ public class BookParse {
                         break;
                     }
 
-                    SearchBookResult searchBookResult = new SearchBookResult();
+                    CurPageBookResult curPageBookResult = new CurPageBookResult();
 
-                    searchBookResult.setLink(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/@href").toString());
-                    searchBookResult.setBookName(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/text()").toString());
-                    searchBookResult.setAuthor(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
-                    searchBookResult.setPublishingHouse(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
-                    searchBookResult.setStandardNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[5]/text()").toString());
-                    searchBookResult.setPublishingYear(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[6]/text()").toString());
-                    searchBookResult.setIndexNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[7]/text()").toString());
+                    curPageBookResult.setLink(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/@href").toString());
+                    curPageBookResult.setBookName(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/text()").toString());
+                    curPageBookResult.setAuthor(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
+                    curPageBookResult.setPublishingHouse(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
+                    curPageBookResult.setStandardNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[5]/text()").toString());
+                    curPageBookResult.setPublishingYear(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[6]/text()").toString());
+                    curPageBookResult.setIndexNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[7]/text()").toString());
 
                     String totalLeftStr = html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[8]/text()").toString();
                     String[] splitStr = totalLeftStr.split(" ");
-                    searchBookResult.setTotal(Integer.valueOf(splitStr[0].substring(splitStr[0].length() - 1)));
-                    searchBookResult.setLeft(Integer.valueOf(splitStr[1].substring(splitStr[1].length() - 1)));
+                    curPageBookResult.setTotal(Integer.valueOf(splitStr[0].substring(splitStr[0].length() - 1)));
+                    curPageBookResult.setLeft(Integer.valueOf(splitStr[1].substring(splitStr[1].length() - 1)));
 
-                    searchBookResultList.add(searchBookResult);
+                    curPageBookResults.add(curPageBookResult);
                 }
 
-                return searchBookResultList;
+                searchBookResult.setCurPageBookResults(curPageBookResults);
+
+                return searchBookResult;
             }
         } catch (IOException e) {
             e.printStackTrace();

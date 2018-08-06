@@ -2,7 +2,6 @@ package com.xiyou3g.xiyouhelper.web.service.impls;
 
 import com.xiyou3g.xiyouhelper.common.ResponseCode;
 import com.xiyou3g.xiyouhelper.common.ServerResponse;
-import com.xiyou3g.xiyouhelper.dao.UserMapper;
 import com.xiyou3g.xiyouhelper.model.*;
 import com.xiyou3g.xiyouhelper.parse.BookParse;
 import com.xiyou3g.xiyouhelper.util.redis.PrefixEnum;
@@ -15,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.*;
 
 import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_DETAIL_PREFIX;
+import static com.xiyou3g.xiyouhelper.util.constant.BookConstant.BOOK_DETAIL_URL_REGEX;
 
 /**
  * @author zeng
@@ -49,9 +50,13 @@ public class BookService implements IBookService {
 
 
     @Override
-    public ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord) {
+    public ServerResponse<SearchBookResult> search(String suchenType, String suchenWord, int curPage) {
 
-        List<SearchBookResult> searchBooksResponse = bookParse.searchBook(suchenType, suchenWord);
+        if (suchenType == null || suchenWord == null) {
+            return ServerResponse.createByErrorMsg("检索类型或检索词为空，检索失败");
+        }
+
+        SearchBookResult searchBooksResponse = bookParse.searchBook(suchenType, suchenWord, curPage);
 
         if (searchBooksResponse == null) {
             return ServerResponse.createByErrorMsg("没有内容");
@@ -117,6 +122,10 @@ public class BookService implements IBookService {
 
         if (url == null) {
             return ServerResponse.createByErrorMsg("无法获取该图书详细信息，link为空");
+        }
+
+        if (!Pattern.matches(BOOK_DETAIL_URL_REGEX, url)) {
+            return ServerResponse.createByErrorMsg("无效链接，检索失败");
         }
 
         StringBuilder stringBuilderUrl = new StringBuilder(BOOK_DETAIL_PREFIX);
