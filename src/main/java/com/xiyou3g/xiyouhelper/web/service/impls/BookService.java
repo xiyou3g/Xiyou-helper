@@ -59,7 +59,7 @@ public class BookService implements IBookService {
         SearchBookResult searchBooksResponse = bookParse.searchBook(suchenType, suchenWord, curPage);
 
         if (searchBooksResponse == null) {
-            return ServerResponse.createByErrorMsg("没有内容");
+            return ServerResponse.createBySuccessMsg("检索结果为空");
         }
 
         return ServerResponse.createBySuccess("查询成功", searchBooksResponse);

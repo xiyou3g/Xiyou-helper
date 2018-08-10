@@ -116,6 +116,8 @@ public class BookParse {
 
                 SearchBookResult searchBookResult = new SearchBookResult();
 
+                searchBookResult.setTotalPage(Integer.valueOf(html.xpath("/html/body/center/form/table[2]/tbody/tr[2]/td[1]/span[2]/strong/text()").toString()));
+
                 searchBookResult.setCurPage(Integer.valueOf(html.xpath("/html/body/center/form/table[2]/tbody/tr[2]/td[1]/span[1]/strong/text()").toString()));
 
                 List<CurPageBookResult> curPageBookResults = new ArrayList<>();
