@@ -40,7 +40,7 @@ public class BookService implements IBookService {
         String sessionId = bookParse.login(barcode, password);
 
         if (sessionId == null) {
-            return ServerResponse.createByErrorMsg("登录失败");
+            return ServerResponse.createByErrorMsg("登录失败，一卡通或密码有误");
         }
 
         sessionUtil.setSessionIdLong(PrefixEnum.Book.getDesc(), barcode, sessionId);

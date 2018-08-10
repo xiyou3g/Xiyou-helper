@@ -34,26 +34,30 @@ public class BookParse {
             return null;
         }
 
-        FormBody formBody = new FormBody.Builder()
-                .add(BOOK_LOGIN_USERNAME, barcode)
-                .add(BOOK_LOGIN_PASSWORD, password)
-                .build();
+        logger.info("url {}", BOOK_LOGIN_URL + "?login_type=barcode&barcode=" + barcode + "&password=" + password);
 
         final okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(BOOK_LOGIN_URL)
-                .post(formBody)
+                .url(BOOK_LOGIN_URL + "?login_type=barcode&barcode=" + barcode + "&password=" + password)
+                .get()
                 .build();
 
 
         Call call = client.newCall(request);
         try {
             Response response = call.execute();
-            String setCookie = response.headers().get("Set-Cookie");
-            String sessionId = setCookie.substring(0, setCookie.indexOf(";"));
+            String responseBody = new String(response.body().bytes());
+            if ("ok".equals(responseBody)) {
 
-            if (sessionId != null) {
-                return sessionId;
+                String setCookie = response.headers().get("Set-Cookie");
+                String sessionId = setCookie.substring(0, setCookie.indexOf(";"));
+                logger.info("sessionId {}", sessionId);
+                if (sessionId != null) {
+                    return sessionId;
+                }
             }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
