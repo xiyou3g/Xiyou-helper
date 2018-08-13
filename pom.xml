@@ -6,7 +6,7 @@
     <groupId>com.xiyou3g</groupId>
     <artifactId>xiyou-helper</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>xiyou-helper</name>
     <description>Demo project for Spring Boot</description>
