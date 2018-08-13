@@ -23,7 +23,7 @@ public class EduConstant {
     public static final String LOGIN_USER_NOTFOUND = "用户名不存在或未按照要求参加教学活动";
     public static final String LOGIN_VALIDATE_CODE_ERROR = "验证码不正确";
 
-    public static final String USER_MESSAGE = XYE_BASEURL + "xsgrxx.aspx?xh=%s&xm=%s&gnmkdm=N121501";
+    public static final String USER_MESSAGE_URL = XYE_BASEURL + "xsgrxx.aspx?xh=%s&xm=%s&gnmkdm=N121501";
 
     public static final String TRAINPLAN_URL = XYE_BASEURL + "pyjh.aspx?xh=%s&xm=%s&gnmkdm=N121607";
 
