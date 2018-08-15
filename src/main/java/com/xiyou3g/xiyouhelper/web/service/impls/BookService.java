@@ -37,15 +37,18 @@ public class BookService implements IBookService {
     @Override
     public ServerResponse<String> login(String barcode, String password) {
 
-        String sessionId = bookParse.login(barcode, password);
+        ServerResponse response = bookParse.login(barcode, password);
+        if (response.isSuccess()) {
+            String sessionId = (String) response.getData();
+            if (sessionId == null) {
+                return ServerResponse.createByErrorMsg("服务器内部错误");
+            }
+            sessionUtil.setSessionIdLong(PrefixEnum.Book.getDesc(), barcode, sessionId);
 
-        if (sessionId == null) {
-            return ServerResponse.createByErrorMsg("登录失败，一卡通或密码有误");
+            return ServerResponse.createBySuccessMsg("登录成功");
         }
 
-        sessionUtil.setSessionIdLong(PrefixEnum.Book.getDesc(), barcode, sessionId);
-
-        return ServerResponse.createBySuccessMsg("登录成功");
+        return ServerResponse.createByErrorMsg(response.getMsg());
     }
 
 
@@ -183,6 +186,27 @@ public class BookService implements IBookService {
         bookMainInfo.setMainInfos(borrowedBooks.getData());
 
         return ServerResponse.createBySuccess("查询成功", bookMainInfo);
+    }
+
+    @Override
+    public ServerResponse<String> logout(String barcode) {
+
+        if (barcode == null) {
+            return ServerResponse.createByErrorMsg("登出操作无效，一卡通为空");
+        }
+
+        String sessionId = sessionUtil.getSessionId(PrefixEnum.Book.getDesc(), barcode);
+        if (sessionId == null) {
+            return ServerResponse.createByErrorMsg("注销失败");
+        }
+
+        boolean result = bookParse.logout(barcode);
+        if (result) {
+            sessionUtil.removeSessionId(PrefixEnum.Book.getDesc(), barcode);
+            return ServerResponse.createBySuccessMsg("注销成功");
+        }
+
+        return ServerResponse.createByErrorMsg("注销失败");
     }
 
 

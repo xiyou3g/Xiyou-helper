@@ -10,6 +10,8 @@ public class BookConstant {
 
     public static final String BOOK_LOGIN_URL = "http://222.24.3.7:8080/opac_two/include/login_app.jsp";
 
+    public static final String BOOK_LOGOUT_URL = "http://222.24.3.7:8080/opac_two/include/loginOut.jsp";
+
     public static final String BOOK_BORROWED_URL = "http://222.24.3.7:8080/opac_two/reader/jieshuxinxi.jsp";
 
     public static final String BOOK_BORROWED_HISTORY_URL = "http://222.24.3.7:8080/opac_two/reader/jieshulishi.jsp";

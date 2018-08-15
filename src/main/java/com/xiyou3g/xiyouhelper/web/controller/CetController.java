@@ -98,7 +98,8 @@ public class CetController {
             e.printStackTrace();
         }
     }
-        @PostMapping("/cet_sys/login")
+
+    @PostMapping("/cet_sys/login")
     public ServerResponse<Cetscore> simulationLogin(String zkzh, String name,
                                                   String validateCode, String equipmentId) {
         String sessionId = sessionUtil.getSessionId(PrefixEnum.CET.getDesc(), equipmentId);
