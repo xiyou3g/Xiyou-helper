@@ -8,7 +8,9 @@ public class BookConstant {
 
     public static String BOOK_HOST = "222.24.3.7:8080";
 
-    public static final String BOOK_LOGIN_URL = "http://222.24.3.7:8080//opac_two/include/login_app.jsp";
+    public static final String BOOK_LOGIN_URL = "http://222.24.3.7:8080/opac_two/include/login_app.jsp";
+
+    public static final String BOOK_LOGOUT_URL = "http://222.24.3.7:8080/opac_two/include/loginOut.jsp";
 
     public static final String BOOK_BORROWED_URL = "http://222.24.3.7:8080/opac_two/reader/jieshuxinxi.jsp";
 
@@ -17,6 +19,8 @@ public class BookConstant {
     public static final String BOOK_LOGIN_USERNAME = "barcode";
 
     public static final String BOOK_LOGIN_PASSWORD = "password";
+
+    public static final String BOOK_LOGIN_TYPE = "barcode";
 
     public static final String SEARCH_BOOK_URL = "http://222.24.3.7:8080/opac_two/search2/searchout.jsp";
 
