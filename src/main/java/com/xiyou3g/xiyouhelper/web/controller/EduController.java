@@ -60,8 +60,7 @@ public class EduController {
     @GetMapping("/xiyou_edu_sys/validate_code")
     public void sendValidateCode(HttpServletResponse response, String equipmentId) {
         OkHttpClient client = new OkHttpClient();
-        response.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9," +
-                "image/webp,image/apng,*/*;q=0.8");
+
         // 如果sessionId == null，flag = false;
         boolean flag = false;
         // 从redis中取出sessionId

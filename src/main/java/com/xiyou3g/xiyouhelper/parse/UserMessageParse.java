@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import static com.xiyou3g.xiyouhelper.util.constant.CommonConstant.*;
-import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.EDU_REFERER;
-import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.REFERER;
+import static com.xiyou3g.xiyouhelper.util.constant.EduConstant.*;
 
 /**
  * 18-7-21 下午12:07
@@ -44,12 +43,13 @@ public class UserMessageParse {
         Response response1 = client.newCall(request1).execute();
         String htmlStr1 = StreamUtils.copyToString(response1.body().byteStream(), Charset.forName("GBK"));
         Html html1 = new Html(htmlStr1);
-        String simpleUserMessageUrl = html1.xpath("/html/body/div/div[1]/ul/li[5]/ul/li[1]/a/@href").get();
-        logger.info(simpleUserMessageUrl);
-        handlerSimpleUserMessage(user, simpleUserMessageUrl);
-
+        String studentName = html1.xpath("//*[@id=\"xhxm\"]/text()").get();
+        studentName = studentName.substring(0, studentName.length() - 2);
+        user.setSid(studentNum);
+        user.setName(studentName);
+        String userMessageUrl = String.format(USER_MESSAGE_URL, studentNum, studentName);
         Request request2 = new Request.Builder()
-                .url(XYE_BASEURL + simpleUserMessageUrl)
+                .url(userMessageUrl)
                 .addHeader(REFERER, EDU_REFERER)
                 .addHeader("Cookie", XYE_SESSION_KEY + sessionId)
                 .build();
@@ -77,12 +77,6 @@ public class UserMessageParse {
     }
 
 
-    private void handlerSimpleUserMessage(User user, String simpleUserMessage) {
-        String temp = simpleUserMessage.substring(simpleUserMessage.indexOf('?') + 1);
-        String[] messages = temp.split("&");
-        user.setSid(messages[0].substring(messages[0].indexOf('=') + 1));
-        user.setName(messages[1].substring(messages[1].indexOf('=') + 1));
-    }
 
 
 
