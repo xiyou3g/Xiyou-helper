@@ -65,4 +65,11 @@ public interface IBookService {
      */
 
     ServerResponse<BookMainInfo> getMain(String barcode);
+
+    /**
+     * 登出
+     * @param barcode
+     * @return
+     */
+    ServerResponse<String> logout(String barcode);
 }
