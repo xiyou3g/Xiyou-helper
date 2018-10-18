@@ -1,5 +1,6 @@
 package com.xiyou3g.xiyouhelper.parse;
 
+import com.xiyou3g.xiyouhelper.common.ServerResponse;
 import com.xiyou3g.xiyouhelper.model.*;
 import okhttp3.*;
 import org.slf4j.Logger;
@@ -28,32 +29,38 @@ public class BookParse {
     @Autowired
     private OkHttpClient client;
 
-    public String login(String barcode, String password) {
+    public ServerResponse<String> login(String barcode, String password) {
 
         if (barcode == null || password == null) {
             return null;
         }
 
-        FormBody formBody = new FormBody.Builder()
-                .add(BOOK_LOGIN_USERNAME, barcode)
-                .add(BOOK_LOGIN_PASSWORD, password)
-                .build();
+        logger.info("url {}", BOOK_LOGIN_URL + "?login_type=barcode&barcode=" + barcode + "&password=" + password);
 
         final okhttp3.Request request = new okhttp3.Request.Builder()
-                .url(BOOK_LOGIN_URL)
-                .post(formBody)
+                .url(BOOK_LOGIN_URL + "?login_type=barcode&barcode=" + barcode + "&password=" + password)
+                .get()
                 .build();
 
 
         Call call = client.newCall(request);
         try {
             Response response = call.execute();
-            String setCookie = response.headers().get("Set-Cookie");
-            String sessionId = setCookie.substring(0, setCookie.indexOf(";"));
+            String responseBody = new String(response.body().bytes(), "GBK");
+            if ("ok".equals(responseBody)) {
 
-            if (sessionId != null) {
-                return sessionId;
+                String setCookie = response.headers().get("Set-Cookie");
+                String sessionId = setCookie.substring(0, setCookie.indexOf(";"));
+                logger.info("sessionId {}", sessionId);
+                if (sessionId != null) {
+                    return ServerResponse.createBySuccess(sessionId);
+                }
+            } else {
+                return ServerResponse.createByErrorMsg(responseBody);
             }
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,7 +70,7 @@ public class BookParse {
     }
 
 
-    public List<SearchBookResult> searchBook(String suchenType, String suchenWord) {
+    public SearchBookResult searchBook(String suchenType, String suchenWord, int curPage) {
 
         if (suchenWord == null) {
             return null;
@@ -77,6 +84,7 @@ public class BookParse {
                 .add("snumber_type", "Y")
                 .add("suchen_match", "mh")
                 .add("recordtype", "all")
+                .add("curpage", String.valueOf(curPage))
                 .build();
 
 
@@ -109,7 +117,13 @@ public class BookParse {
                     return null;
                 }
 
-                List<SearchBookResult> searchBookResultList = new ArrayList<>();
+                SearchBookResult searchBookResult = new SearchBookResult();
+
+                searchBookResult.setTotalPage(Integer.valueOf(html.xpath("/html/body/center/form/table[2]/tbody/tr[2]/td[1]/span[2]/strong/text()").toString()));
+
+                searchBookResult.setCurPage(Integer.valueOf(html.xpath("/html/body/center/form/table[2]/tbody/tr[2]/td[1]/span[1]/strong/text()").toString()));
+
+                List<CurPageBookResult> curPageBookResults = new ArrayList<>();
 
                 String tdFlag = null;
 //        一页默认20条记录 爬取10条测试
@@ -121,25 +135,27 @@ public class BookParse {
                         break;
                     }
 
-                    SearchBookResult searchBookResult = new SearchBookResult();
+                    CurPageBookResult curPageBookResult = new CurPageBookResult();
 
-                    searchBookResult.setLink(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/@href").toString());
-                    searchBookResult.setBookName(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/text()").toString());
-                    searchBookResult.setAuthor(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
-                    searchBookResult.setPublishingHouse(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
-                    searchBookResult.setStandardNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[5]/text()").toString());
-                    searchBookResult.setPublishingYear(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[6]/text()").toString());
-                    searchBookResult.setIndexNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[7]/text()").toString());
+                    curPageBookResult.setLink(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/@href").toString());
+                    curPageBookResult.setBookName(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[2]/a/text()").toString());
+                    curPageBookResult.setAuthor(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[3]/text()").toString());
+                    curPageBookResult.setPublishingHouse(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[4]/text()").toString());
+                    curPageBookResult.setStandardNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[5]/text()").toString());
+                    curPageBookResult.setPublishingYear(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[6]/text()").toString());
+                    curPageBookResult.setIndexNumber(html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[7]/text()").toString());
 
                     String totalLeftStr = html.xpath("//*[@id=\"searchout_tuwen\"]/table/tbody/tr[" + i + "]/td[8]/text()").toString();
                     String[] splitStr = totalLeftStr.split(" ");
-                    searchBookResult.setTotal(Integer.valueOf(splitStr[0].substring(splitStr[0].length() - 1)));
-                    searchBookResult.setLeft(Integer.valueOf(splitStr[1].substring(splitStr[1].length() - 1)));
+                    curPageBookResult.setTotal(Integer.valueOf(splitStr[0].substring(splitStr[0].length() - 1)));
+                    curPageBookResult.setLeft(Integer.valueOf(splitStr[1].substring(splitStr[1].length() - 1)));
 
-                    searchBookResultList.add(searchBookResult);
+                    curPageBookResults.add(curPageBookResult);
                 }
 
-                return searchBookResultList;
+                searchBookResult.setCurPageBookResults(curPageBookResults);
+
+                return searchBookResult;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -552,5 +568,32 @@ public class BookParse {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean logout(String barcode) {
+
+        final okhttp3.Request request = new okhttp3.Request.Builder()
+                .addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36")
+                .addHeader("Referer", "http://222.24.3.7:8080/opac_two/reader/infoList.jsp")
+                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8")
+                .addHeader("Upgrade-Insecure-Requests", "1")
+                .addHeader("Host", BOOK_HOST)
+                .get()
+                .url(BOOK_LOGOUT_URL)
+                .build();
+
+        Call call = client.newCall(request);
+        Response response = null;
+
+        try {
+            response = call.execute();
+            if (response != null && response.isSuccessful()) {
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
