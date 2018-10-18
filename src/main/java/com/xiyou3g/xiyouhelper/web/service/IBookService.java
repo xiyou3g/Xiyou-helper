@@ -26,7 +26,7 @@ public interface IBookService {
      * @param suchenWord 关键字
      * @return
      */
-    ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord);
+    ServerResponse<SearchBookResult> search(String suchenType, String suchenWord, int curPage);
 
     /**
      * 查询自己的借阅书籍
@@ -65,4 +65,11 @@ public interface IBookService {
      */
 
     ServerResponse<BookMainInfo> getMain(String barcode);
+
+    /**
+     * 登出
+     * @param barcode
+     * @return
+     */
+    ServerResponse<String> logout(String barcode);
 }

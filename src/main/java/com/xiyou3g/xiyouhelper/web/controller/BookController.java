@@ -30,6 +30,12 @@ public class BookController {
         return bookService.login(barcode, password);
     }
 
+    @PostMapping("/logout")
+    public ServerResponse<String> logout(String barcode) {
+
+        return bookService.logout(barcode);
+    }
+
     @PostMapping("/getBookDetail")
     public ServerResponse<BookDetail> getBookDetail(String url) {
 
@@ -37,9 +43,9 @@ public class BookController {
     }
 
     @PostMapping("/search")
-    public ServerResponse<List<SearchBookResult>> search(String suchenType, String suchenWord) {
+    public ServerResponse<SearchBookResult> search(String suchenType, String suchenWord, int curPage) {
 
-        return bookService.search(suchenType, suchenWord);
+        return bookService.search(suchenType, suchenWord, curPage);
     }
 
 
